@@ -835,3 +835,118 @@ vgdisplay Labo1
 `Free  PE / Size       0 / 0` &rarr; On utilise bien la totalité de l'espace disponible
 
 ---
+
+### Résumé des commandes éssentiels d'informations sur l'état du système LVM
+
+#### Pour les PV (Physical Volumes)
+
+`pvs` ou `pvscan` &rarr; liste d'informations minimales
+```bash
+pvs
+  PV         VG    Fmt  Attr PSize  PFree
+  /dev/sda3  rhel  lvm2 a--  <7,00g    0 
+  /dev/sdb1  Labo1 lvm2 a--  <4,00g    0 
+  /dev/sdc1  Labo1 lvm2 a--  <4,00g    0
+```
+```bash
+pvscan
+  PV /dev/sda3   VG rhel    lvm2 [<7,00 GiB / 0    free]
+  PV /dev/sdb1   VG Labo1   lvm2 [<4,00 GiB / 0    free]
+  PV /dev/sdc1   VG Labo1   lvm2 [<4,00 GiB / 0    free]
+  Total: 3 [<14,99 GiB] / in use: 3 [<14,99 GiB] / in no VG: 0 [0   ]
+```
+
+`pvdisplay` &rarr; liste d'informations détaillées nombreuses options &rarr; `--help`
+```bash
+pvdisplay -m
+  --- Physical volume ---
+  PV Name               /dev/sda3
+  VG Name               rhel
+  PV Size               <7,00 GiB / not usable 0   
+  Allocatable           yes (but full)
+  PE Size               4,00 MiB
+  Total PE              1791
+  Free PE               0
+  Allocated PE          1791
+  PV UUID               tY3mNB-EC41-oCzl-fb8Q-A5T9-vOZG-lFPWFT
+   
+  --- Physical Segments ---
+  Physical extent 0 to 204:
+    Logical volume	/dev/rhel/swap
+    Logical extents	0 to 204
+  Physical extent 205 to 1790:
+    Logical volume	/dev/rhel/root
+    Logical extents	0 to 1585
+   
+  --- Physical volume ---
+  PV Name               /dev/sdb1
+  VG Name               Labo1
+  PV Size               <4,00 GiB / not usable 2,00 MiB
+  Allocatable           yes (but full)
+  PE Size               4,00 MiB
+  Total PE              1023
+  Free PE               0
+  Allocated PE          1023
+  PV UUID               l6Gmss-Owp1-pXyn-M3SI-UHPE-vfgJ-cze7Qv
+   
+  --- Physical Segments ---
+  Physical extent 0 to 674:
+    Logical volume	/dev/Labo1/lvlab1
+    Logical extents	0 to 674
+  Physical extent 675 to 1022:
+    Logical volume	/dev/Labo1/lvlab3
+    Logical extents	0 to 347
+   
+  --- Physical volume ---
+  PV Name               /dev/sdc1
+  VG Name               Labo1
+  PV Size               <4,00 GiB / not usable 2,00 MiB
+  Allocatable           yes (but full)
+  PE Size               4,00 MiB
+  Total PE              1023
+  Free PE               0
+  Allocated PE          1023
+  PV UUID               6ATdzz-3dSW-dYPs-1meV-1GF0-PRDy-Jqmkvn
+   
+  --- Physical Segments ---
+  Physical extent 0 to 674:
+    Logical volume	/dev/Labo1/lvlab2
+    Logical extents	0 to 674
+  Physical extent 675 to 1022:
+    Logical volume	/dev/Labo1/lvlab3
+    Logical extents	348 to 695
+```
+#### Pour les VG (Volume Groups)
+
+`vgs` &rarr; liste d'informations minimales
+```bash
+vgs
+  VG    #PV #LV #SN Attr   VSize  VFree
+  Labo1   2   3   0 wz--n-  7,99g    0 
+  rhel    1   2   0 wz--n- <7,00g    0 
+```
+`vgdisplay Labo1` &rarr; liste d'informations détaillées
+```bash
+vgdisplay Labo1
+  --- Volume group ---
+  VG Name               Labo1
+  System ID             
+  Format                lvm2
+  Metadata Areas        2
+  Metadata Sequence No  40
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                3
+  Open LV               2
+  Max PV                0
+  Cur PV                2
+  Act PV                2
+  VG Size               7,99 GiB
+  PE Size               4,00 MiB
+  Total PE              2046
+  Alloc PE / Size       2046 / 7,99 GiB
+  Free  PE / Size       0 / 0   
+  VG UUID               efcT72-pOkM-7ogu-1moq-9v31-dqkK-CdHW7l
+```
+#### Pour les LV ()
