@@ -40,8 +40,8 @@ sr0            11:0    1 816,4M  0 rom
 
 _On utilise sdb et sdc dans ce lab_
 
-sdb             8:16   0     4G  0 disk
-sdc             8:32   0     4G  0 disk
+`sdb             8:16   0     4G  0 disk`
+`sdc             8:32   0     4G  0 disk`
 
 **Il est possible d'utiliser un disque entier ou une partition pour créer un PV, à adapter selon le contexte, ici on utilise les disques entiers**
 
