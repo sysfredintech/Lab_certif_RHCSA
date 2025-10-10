@@ -1,3 +1,3 @@
-# Préparation pour la certification RHCSA
-## Fiches pratiques tutos et TP
-- Chapitre LVM <https://github.com/sysfredintech/Lab_certif_RHCSA/blob/main/lvm.md>
+# Préparation de la certification RHCSA
+## Fiches pratiques, notes et TP sur les thèmes abordés à l'examen
+- Chapitre [LVM](./lvm.md)
