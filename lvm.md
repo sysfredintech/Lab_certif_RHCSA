@@ -1,22 +1,25 @@
-#  LVM - RHEL 10
+#  LVM - RHEL 10 - Volumes linéaires avec des volumes physiques différents
 ---
 
-#### <table><tr><td><p align="center">Physicals Volumes
+## <table><tr><td><p align="center">Physicals Volumes
 
 ### <table><tr><td><p align="center">Volume Groups
 
-## <table><tr><td><p align="center">Logical Volumes</p></table></tr></td></p></table></tr></td></p></table></tr></td>
+#### <table><tr><td><p align="center">Logical Volumes</p></table></tr></td></p></table></tr></td></p></table></tr></td>
 
 ---
 
-## Contexte et objectifs
+## Contexte
 
 - 2 disques de 4Go disponibles immédiatement
 - 1 disque de 4Go disponible ultérieurement
+
+## Objectifs
+
 - Créer 3 LV de tailles similaires utilisant la totalité de l'espace disponible
-- Ecriture de données sur les volumes
+- Écriture de données sur les volumes
 - Agrandir le VG et un LV de + 4Go après l'ajout du 3ème disque
-- Ecriture de données sur le LV ainsi agrandit
+- Écriture de données sur le LV ainsi agrandit
 - Réduire le LV puis le VG augmenté précédemment de 4Go
 - Supprimer le 3ème PV
 
@@ -38,12 +41,14 @@ sdc             8:32   0     4G  0 disk
 sr0            11:0    1 816,4M  0 rom
 ```
 
-_On utilise sdb et sdc dans ce lab_
+**On utilise sdb et sdc dans ce lab**
 
 `sdb             8:16   0     4G  0 disk`
 `sdc             8:32   0     4G  0 disk`
 
-**Il est possible d'utiliser un disque entier ou une partition pour créer un PV, à adapter selon le contexte, ici on utilise les disques entiers**
+_Il est possible d'utiliser un disque entier ou une partition pour créer un PV, à adapter selon les besoins, ici on utilise les disques entiers_
+
+> LVM vous permet de créer des volumes physiques en dehors des partitions de disques. Il est généralement recommandé... de créer une partition qui couvre le disque entier afin de l'étiqueter en tant que volume physique LVM
 
 ---
 
@@ -69,9 +74,7 @@ Command (m for help):
 
 #### Cette opération est à réitérer avec SDC
 
----
-
-### Vérifier la configuration des disques
+<ins>Vérification:</ins>
 
 ```bash
 lsblk
@@ -88,11 +91,8 @@ sdc             8:32   0     4G  0 disk
 └─sdc1          8:33   0     4G  0 part 
 sr0            11:0    1 816,4M  0 rom
 ```
-
-sdb             8:16   0     4G  0 disk
-└─sdb1          8:17   0     4G  0 part
-sdc             8:32   0     4G  0 disk
-└─sdc1          8:33   0     4G  0 part
+`└─sdb1          8:17   0     4G  0 part`
+`└─sdc1          8:33   0     4G  0 part`
 
 ```bash
 fdisk -l /dev/sdb /dev/sdc
@@ -119,6 +119,8 @@ Disk identifier: A02DCC54-CCB2-40EC-A66F-0E9451030AC0
 Device     Start     End Sectors Size Type
 /dev/sdc1   2048 8386559 8384512   4G Linux LVM
 ```
+`/dev/sdb1   2048 8386559 8384512   4G Linux LVM`
+`/dev/sdc1   2048 8386559 8384512   4G Linux LVM`
 
 **Les 2 disques sont prêts**
 
@@ -129,16 +131,14 @@ Device     Start     End Sectors Size Type
 _Le 1er PV doit être créé manuellement, il est possible d'ajouter des volumes ensuite directement avec vgcreate_
 
 ```bash
-pvcreate /dev/sdb1
+pvcreate /dev/sdb1 /dev/sdc1
   Physical volume "/dev/sdb1" successfully created.
-```
-
-```bash
-pvcreate /dev/sdc1
   Physical volume "/dev/sdc1" successfully created.
 ```
 
-**Vérification**
+**On a créé un PV avec /dev/sdb1 et un PV avec /dev/sdc1**
+
+<ins>Vérification:</ins>
 
 ```bash
 pvdisplay /dev/sdb1 /dev/sdc1
@@ -171,14 +171,13 @@ pvdisplay /dev/sdb1 /dev/sdc1
 
 ### Création d'un VG
 
-**On a créé un VG nommé _Labo1_ avec 2 volumes _sdb1_ et _sdc1_**
-
 ```bash
 vgcreate Labo1 /dev/sdb1 /dev/sdc1
   Volume group "Labo1" successfully created
 ```
+**On a créé un VG nommé _Labo1_ avec 2 volumes: _sdb1_ et _sdc1_**
 
-**Vérification**
+<ins>Vérification:</ins>
 
 ```bash
 vgdisplay Labo1
@@ -204,12 +203,12 @@ vgdisplay Labo1
   VG UUID               88SjLi-cEyA-ubSR-kbQa-Ti40-Y2K4-Px6BX6
 ```
 
-`Cur PV                2` &rarr; 2 PV utilisés
-`Act PV                2` &rarr; 2 PV actifs (fonctionnels)
-`VG Size               7,99 GiB` &rarr; Taille totale du VG en Go
-`PE Size               4,00 MiB` &rarr; Taille des Physical Extension en Mo
-`Total PE              2046` &rarr; Nombre total de PE sur le VG
-_2046 PE X 4Mo = 7.99Go_
+- `Cur PV                2` &rarr; 2 PV utilisés
+- `Act PV                2` &rarr; 2 PV actifs (fonctionnels)
+- `VG Size               7,99 GiB` &rarr; Taille totale du VG en Go
+- `PE Size               4,00 MiB` &rarr; Taille des Physical Extension en Mo
+- `Total PE              2046` &rarr; Nombre total de PE sur le VG
+- _2046 PE X 4Mo = 7.99Go_
 
 ---
 
@@ -220,9 +219,9 @@ lvcreate -n lvlab1 -l 33%VG Labo1
   Logical volume "lvlab1" created.
 ```
 
-On a créé un LV nommé _lvlab1_ sur le VG _Labo1_ d'une taille égale à 33% de la taille totale du VG
+**On a créé un LV nommé _lvlab1_ sur le VG _Labo1_ d'une taille égale à 33% de la taille totale du VG**
 
-**Vérification**
+<ins>Vérification:</ins>
 
 ```bash
 lvdisplay Labo1/lvlab1
@@ -244,8 +243,8 @@ lvdisplay Labo1/lvlab1
   Block device           253:2
 ```
 
-`LV Path                /dev/Labo1/lvlab1` &rarr; Correspond au chemin du volume
-`LV Size                <2,64 GiB` &rarr; Correspond à la taille du volume
+- `LV Path                /dev/Labo1/lvlab1` &rarr; Correspond au chemin du volume
+- `LV Size                <2,64 GiB` &rarr; Correspond à la taille du volume
 
 #### Cette opération est à réitérer avec pour créer les 2 autres volumes
 
@@ -385,13 +384,13 @@ fichiers : complété
 
 #### Monter les LV sur le système
 
-Création des points de montage
+1. Création des points de montage
 
 ```bash
 mkdir /mnt/lvlab1 /mnt/lvlab2 /mnt/lvlab3
 ```
 
-Montage des partitions
+2. Montage des partitions
 
 ```bash
 mount /dev/Labo1/lvlab1 /mnt/lvlab1
@@ -485,7 +484,7 @@ sdd                8:48   0     4G  0 disk
 sr0               11:0    1 816,4M  0 rom
 ```
 
-sdd                8:48   0     4G  0 disk
+- `sdd                8:48   0     4G  0 disk`
 
 ```bash
 fdisk /dev/sdd
@@ -557,9 +556,9 @@ vgdisplay Labo1
   VG UUID               efcT72-pOkM-7ogu-1moq-9v31-dqkK-CdHW7l
 ```
 
-`Cur PV                3` &rarr; 3 disques
-`VG Size               <11,99 GiB` &rarr; Nouvelle taille totale du VG
-`Free  PE / Size       1044 / <4,08 GiB` &rarr; Espace disponible
+- `Cur PV                3` &rarr; 3 disques
+- `VG Size               <11,99 GiB` &rarr; Nouvelle taille totale du VG
+- `Free  PE / Size       1044 / <4,08 GiB` &rarr; Espace disponible
 
 <ins>Représentation Graphique:</ins>
 
@@ -581,6 +580,8 @@ vgdisplay Labo1
 ### Agrandir le LV lvlab3 avec l'espace nouvellement disponible sur le VG Labo1
 
 _Afin d'utiliser la taille maximale d'espace disponible, dans ce lab on va définir la valeur en PE, il est possible de déterminer cette valeur en Go ou en %_
+
+> À l'intérieur d'un groupe de volumes, l'espace disque disponible pour l'allocation est divisé en des unités de taille fixe appelées des extensions. Une extension est la plus petite unité d'espace pouvant être allouée.
 
 ```bash
 lvresize -l +1044 Labo1/lvlab3
@@ -626,7 +627,7 @@ lvdisplay -m Labo1/lvlab3
     Physical extents 0 to 1022
 ```
 
-`LV Size                6,71 GiB` &rarr; Nouvelle taille du LV
+- `LV Size                6,71 GiB` &rarr; Nouvelle taille du LV
 
 **A ce stade, seul le LV à été agrandi, pas la partition donc l'espace supplémentaire n'est pas encore utilisable**
 
@@ -675,11 +676,11 @@ df -h | grep mnt
 /dev/mapper/Labo1-lvlab3   6,6G    1,5G  4,8G  24% /mnt/lvlab3
 ```
 
-`/dev/mapper/Labo1-lvlab3   6,6G    1,5G  4,8G  24% /mnt/lvlab3` &rarr; Nouvelle taille du volume = 6.6Go
+- `/dev/mapper/Labo1-lvlab3   6,6G    1,5G  4,8G  24% /mnt/lvlab3` &rarr; Nouvelle taille du volume = 6.6Go
 
 4. Test d'écriture sur le volume
 
-On écrit un fichier de 500Mo sur _/mnt/lvlab3_
+**On écrit un fichier de 500Mo sur _/mnt/lvlab3_**
 
 ```bash
 dd if=/dev/urandom of=/mnt/lvlab3/fichier_500mo bs=1M count=500 status=progress
@@ -737,7 +738,7 @@ En train de redimensionner le système de fichiers sur /dev/Labo1/lvlab3 à 2578
 Le système de fichiers sur /dev/Labo1/lvlab3 a maintenant une taille de 257851 blocs (4k).
 ```
 
-4. On réduit le LV lvlab3 d'une valeur minimum égale à la taille de sdd1
+4. On redimensionne le LV lvlab3 en supprimant une valeur minimum égale à la taille de sdd1
 
 ```bash
 pvdisplay /dev/sdd1
@@ -759,7 +760,7 @@ Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
 I/O size (minimum/optimal): 512 bytes / 512 bytes
 ```
-`/dev/Labo1/lvlab3: 6,71 GiB` moins `PV Size               <4,00 GiB` &rarr; 2Go (pour prendre une marge)
+`/dev/Labo1/lvlab3: 6,71 GiB` moins `PV Size               <4,00 GiB` &rarr; on redimenssione à 2Go pour prendre une marge
 
 ```bash
 lvresize -L 2G Labo1/lvlab3
@@ -793,18 +794,19 @@ pvremove /dev/sdd1
   Labels on physical volume "/dev/sdd1" successfully wiped.
 ```
 
-8. Réasigner l'espace disponible restant sur le VG Labo1 au LV lvlab3
+8. Réassigner l'espace disponible restant sur le VG Labo1 au LV lvlab3
+
+```bash
+lvresize -l +100%FREE Labo1/lvlab3
+  Size of logical volume Labo1/lvlab3 changed from 2,00 GiB (512 extents) to <2,72 GiB (696 extents).
+  Logical volume Labo1/lvlab3 successfully resized.
+```
 
 ```bash
 resize2fs /dev/Labo1/lvlab3
 resize2fs 1.47.1 (20-May-2024)
 En train de redimensionner le système de fichiers sur /dev/Labo1/lvlab3 à 524288 (4k) blocs.
 Le système de fichiers sur /dev/Labo1/lvlab3 a maintenant une taille de 524288 blocs (4k).
-```
-```bash
-lvresize -l +100%FREE Labo1/lvlab3
-  Size of logical volume Labo1/lvlab3 changed from 2,00 GiB (512 extents) to <2,72 GiB (696 extents).
-  Logical volume Labo1/lvlab3 successfully resized.
 ```
 
 <ins>Vérification:</ins>
@@ -832,11 +834,11 @@ vgdisplay Labo1
   Free  PE / Size       0 / 0   
   VG UUID               efcT72-pOkM-7ogu-1moq-9v31-dqkK-CdHW7l
 ```
-`Free  PE / Size       0 / 0` &rarr; On utilise bien la totalité de l'espace disponible
+`Free  PE / Size       0 / 0` &rarr; On utilise bien la totalité de l'espace du VG
 
 ---
 
-### Résumé des commandes éssentiels d'informations sur l'état du système LVM
+### Résumé des commandes essentielles d'informations sur l'état du système LVM
 
 #### Pour les PV (Physical Volumes)
 
@@ -856,7 +858,7 @@ pvscan
   Total: 3 [<14,99 GiB] / in use: 3 [<14,99 GiB] / in no VG: 0 [0   ]
 ```
 
-`pvdisplay` &rarr; liste d'informations détaillées nombreuses options &rarr; `--help`
+`pvdisplay` &rarr; liste d'informations détaillées avec nombreuses options &rarr; `--help`
 ```bash
 pvdisplay -m
   --- Physical volume ---
@@ -918,16 +920,21 @@ pvdisplay -m
 ```
 #### Pour les VG (Volume Groups)
 
-`vgs` &rarr; liste d'informations minimales
+`vgs` ou `vgscan` &rarr; liste d'informations minimales
 ```bash
 vgs
   VG    #PV #LV #SN Attr   VSize  VFree
   Labo1   2   3   0 wz--n-  7,99g    0 
   rhel    1   2   0 wz--n- <7,00g    0 
 ```
-`vgdisplay Labo1` &rarr; liste d'informations détaillées
 ```bash
-vgdisplay Labo1
+vgscan
+  Found volume group "rhel" using metadata type lvm2
+  Found volume group "Labo1" using metadata type lvm2
+```
+`vgdisplay Labo1` &rarr; liste d'informations détaillées avec nombreuses options &rarr; `--help`
+```bash
+vgdisplay -v Labo1
   --- Volume group ---
   VG Name               Labo1
   System ID             
@@ -938,7 +945,7 @@ vgdisplay Labo1
   VG Status             resizable
   MAX LV                0
   Cur LV                3
-  Open LV               2
+  Open LV               0
   Max PV                0
   Cur PV                2
   Act PV                2
@@ -948,5 +955,171 @@ vgdisplay Labo1
   Alloc PE / Size       2046 / 7,99 GiB
   Free  PE / Size       0 / 0   
   VG UUID               efcT72-pOkM-7ogu-1moq-9v31-dqkK-CdHW7l
+   
+  --- Logical volume ---
+  LV Path                /dev/Labo1/lvlab1
+  LV Name                lvlab1
+  VG Name                Labo1
+  LV UUID                eJcaPQ-KGe0-ifjF-g3gp-Z1O4-D0QM-PnE2Ym
+  LV Write Access        read/write
+  LV Creation host, time localhost.localdomain, 2025-10-08 19:52:20 +0200
+  LV Status              available
+  # open                 0
+  LV Size                <2,64 GiB
+  Current LE             675
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:2
+   
+  --- Logical volume ---
+  LV Path                /dev/Labo1/lvlab2
+  LV Name                lvlab2
+  VG Name                Labo1
+  LV UUID                EjViku-czlp-sbU5-HPHI-sxAF-pfnn-BEub5x
+  LV Write Access        read/write
+  LV Creation host, time localhost.localdomain, 2025-10-08 19:53:48 +0200
+  LV Status              available
+  # open                 0
+  LV Size                <2,64 GiB
+  Current LE             675
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:3
+   
+  --- Logical volume ---
+  LV Path                /dev/Labo1/lvlab3
+  LV Name                lvlab3
+  VG Name                Labo1
+  LV UUID                raexd0-orre-FvbT-9MOx-LUpd-XQ7h-rfhfrb
+  LV Write Access        read/write
+  LV Creation host, time localhost.localdomain, 2025-10-09 11:25:34 +0200
+  LV Status              available
+  # open                 0
+  LV Size                <2,72 GiB
+  Current LE             696
+  Segments               2
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:4
+   
+  --- Physical volumes ---
+  PV Name               /dev/sdb1     
+  PV UUID               l6Gmss-Owp1-pXyn-M3SI-UHPE-vfgJ-cze7Qv
+  PV Status             allocatable
+  Total PE / Free PE    1023 / 0
+   
+  PV Name               /dev/sdc1     
+  PV UUID               6ATdzz-3dSW-dYPs-1meV-1GF0-PRDy-Jqmkvn
+  PV Status             allocatable
+  Total PE / Free PE    1023 / 0
+
 ```
-#### Pour les LV ()
+#### Pour les LV (Logical Volume)
+
+`lvs` ou `lvscan` &rarr; liste d'informations minimales
+```bash
+lvs
+  LV     VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  lvlab1 Labo1 -wi-a-----  <2,64g                                                    
+  lvlab2 Labo1 -wi-a-----  <2,64g                                                    
+  lvlab3 Labo1 -wi-a-----  <2,72g                                                    
+  root   rhel  -wi-ao----  <6,20g                                                    
+  swap   rhel  -wi-ao---- 820,00m
+  ```
+```bash
+lvscan
+  ACTIVE            '/dev/rhel/swap' [820,00 MiB] inherit
+  ACTIVE            '/dev/rhel/root' [<6,20 GiB] inherit
+  ACTIVE            '/dev/Labo1/lvlab1' [<2,64 GiB] inherit
+  ACTIVE            '/dev/Labo1/lvlab2' [<2,64 GiB] inherit
+  ACTIVE            '/dev/Labo1/lvlab3' [<2,72 GiB] inherit
+```
+`lvdisplay` &rarr; liste d'informations détaillées avec nombreuses options &rarr; `--help`
+```bash
+lvdisplay -m Labo1
+  --- Logical volume ---
+  LV Path                /dev/Labo1/lvlab1
+  LV Name                lvlab1
+  VG Name                Labo1
+  LV UUID                eJcaPQ-KGe0-ifjF-g3gp-Z1O4-D0QM-PnE2Ym
+  LV Write Access        read/write
+  LV Creation host, time localhost.localdomain, 2025-10-08 19:52:20 +0200
+  LV Status              available
+  # open                 0
+  LV Size                <2,64 GiB
+  Current LE             675
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:2
+   
+  --- Segments ---
+  Logical extents 0 to 674:
+    Type		linear
+    Physical volume	/dev/sdb1
+    Physical extents	0 to 674
+   
+   
+  --- Logical volume ---
+  LV Path                /dev/Labo1/lvlab2
+  LV Name                lvlab2
+  VG Name                Labo1
+  LV UUID                EjViku-czlp-sbU5-HPHI-sxAF-pfnn-BEub5x
+  LV Write Access        read/write
+  LV Creation host, time localhost.localdomain, 2025-10-08 19:53:48 +0200
+  LV Status              available
+  # open                 0
+  LV Size                <2,64 GiB
+  Current LE             675
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:3
+   
+  --- Segments ---
+  Logical extents 0 to 674:
+    Type		linear
+    Physical volume	/dev/sdc1
+    Physical extents	0 to 674
+   
+   
+  --- Logical volume ---
+  LV Path                /dev/Labo1/lvlab3
+  LV Name                lvlab3
+  VG Name                Labo1
+  LV UUID                raexd0-orre-FvbT-9MOx-LUpd-XQ7h-rfhfrb
+  LV Write Access        read/write
+  LV Creation host, time localhost.localdomain, 2025-10-09 11:25:34 +0200
+  LV Status              available
+  # open                 0
+  LV Size                <2,72 GiB
+  Current LE             696
+  Segments               2
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:4
+   
+  --- Segments ---
+  Logical extents 0 to 347:
+    Type		linear
+    Physical volume	/dev/sdb1
+    Physical extents	675 to 1022
+   
+  Logical extents 348 to 695:
+    Type		linear
+    Physical volume	/dev/sdc1
+    Physical extents	675 to 102
+```
+
+---
+
+_Sources:_
+- https://docs.redhat.com/fr/documentation/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index
