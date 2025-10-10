@@ -43,8 +43,8 @@ sr0            11:0    1 816,4M  0 rom
 
 **On utilise sdb et sdc dans ce lab**
 
-`sdb             8:16   0     4G  0 disk`
-`sdc             8:32   0     4G  0 disk`
+- `sdb             8:16   0     4G  0 disk`
+- `sdc             8:32   0     4G  0 disk`
 
 _Il est possible d'utiliser un disque entier ou une partition pour créer un PV, à adapter selon les besoins, ici on utilise les disques entiers_
 
@@ -91,8 +91,8 @@ sdc             8:32   0     4G  0 disk
 └─sdc1          8:33   0     4G  0 part 
 sr0            11:0    1 816,4M  0 rom
 ```
-`└─sdb1          8:17   0     4G  0 part`
-`└─sdc1          8:33   0     4G  0 part`
+- `└─sdb1          8:17   0     4G  0 part`
+- `└─sdc1          8:33   0     4G  0 part`
 
 ```bash
 fdisk -l /dev/sdb /dev/sdc
@@ -119,8 +119,8 @@ Disk identifier: A02DCC54-CCB2-40EC-A66F-0E9451030AC0
 Device     Start     End Sectors Size Type
 /dev/sdc1   2048 8386559 8384512   4G Linux LVM
 ```
-`/dev/sdb1   2048 8386559 8384512   4G Linux LVM`
-`/dev/sdc1   2048 8386559 8384512   4G Linux LVM`
+- `/dev/sdb1   2048 8386559 8384512   4G Linux LVM`
+- `/dev/sdc1   2048 8386559 8384512   4G Linux LVM`
 
 **Les 2 disques sont prêts**
 
