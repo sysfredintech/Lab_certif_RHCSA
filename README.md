@@ -1,2 +1,3 @@
-# Lab_certif_RHCSA
-Tutos et TP pour préparation de la certification RHCSA
+# Préparation de la certification RHCSA
+## Fiches pratiques, notes et TP sur les thèmes abordés à l'examen
+- Chapitre [LVM](./lvm.md)
