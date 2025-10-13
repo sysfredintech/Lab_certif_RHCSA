@@ -246,7 +246,7 @@ lvdisplay Labo1/lvlab1
 - `LV Path                /dev/Labo1/lvlab1` &rarr; Correspond au chemin du volume
 - `LV Size                <2,64 GiB` &rarr; Correspond à la taille du volume
 
-#### Cette opération est à réitérer avec pour créer les 2 autres volumes
+#### Cette opération est à réitérer pour créer les 2 autres volumes
 
 ```bash
 lvcreate -n lvlab2 -l 33%VG Labo1
@@ -339,6 +339,21 @@ lvdisplay -m Labo1
     Type  linear
     Physical volume /dev/sdc1
     Physical extents 675 to 1001
+```
+<ins>Avec lsblk:</ins>
+```bash
+lsblk -f
+sdb                                                                 
+└─sdb1        LVM2_member LVM2 001
+  ├─Labo1-lvlab1
+  │                                                                             
+  └─Labo1-lvlab3
+                                                                                
+sdc                                                                             
+└─sdc1        LVM2_member LVM2 001
+  ├─Labo1-lvlab2
+  │                                                                             
+  └─Labo1-lvlab3
 ```
 
 <ins>Représentation Graphique:</ins>
