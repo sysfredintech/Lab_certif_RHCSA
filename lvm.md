@@ -1,5 +1,8 @@
-#  LVM - RHEL 10 - Volumes linéaires avec des volumes physiques différents
----
+#  LVM - RHEL 10
+
+***
+
+## Volumes linéaires avec des volumes physiques différents
 
 ## <table><tr><td><p align="center">Physicals Volumes
 
