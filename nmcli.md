@@ -339,3 +339,9 @@ bridge-ethlab       443a3b26-bcfd-4472-a20e-a6ffabffc8d0  bridge    br-ethlab
 bridge-slave-ens19  a1b7721d-7096-44fa-9ba1-baa59536c7c2  ethernet  ens19     
 lo                  74d169bd-8dc0-4921-990f-bd9839c9be0c  loopback  lo
 ```
+
+---
+
+_Source principale:_
+
+- https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/index
