@@ -597,3 +597,8 @@ curl http://localhost:8088/index.html
 1. Vérification des logs avec `sealert` systématiquement
 2. Favoriser l'utilisation des booléens lorsque cela est possible
 3. Pour ne pas désactiver SELinux, passer en mode `permissive` lorsque le debuggage est nécessaire
+
+---
+
+_Source principale:_
+- https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/10/html/using_selinux/index
