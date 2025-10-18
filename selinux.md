@@ -600,5 +600,6 @@ curl http://localhost:8088/index.html
 
 ---
 
-_Source principale:_
+_Sources principales:_
 - https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/10/html/using_selinux/index
+- man -k selinux

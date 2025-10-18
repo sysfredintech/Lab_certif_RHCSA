@@ -452,5 +452,5 @@ vm.swappiness = 60
 
 _Sources principales:_
 
-- https://docs.redhat.com/fr/documentation/red_hat_enterprise_linux/7/html/storage_administration_guide/ch-swapspace
+- https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/10/html/managing_storage_devices/getting-started-with-swap
 - `man swapon`

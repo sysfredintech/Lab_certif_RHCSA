@@ -1139,5 +1139,6 @@ lvdisplay -m Labo1
 
 ---
 
-_Sources:_
-- https://docs.redhat.com/fr/documentation/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index
+_Sources principales:_
+[- https://docs.redhat.com/fr/documentation/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/index](https://docs.redhat.com/fr/documentation/red_hat_enterprise_linux/10/html/configuring_and_managing_logical_volumes/index)
+- man lvm
