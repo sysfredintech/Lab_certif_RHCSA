@@ -6,7 +6,7 @@
 
 ---
 
-<ins>Toutes les opérations réalisées doivent être valider avec `firewall-cmd --reload` si l'option `--permanent` a été passée pour prendre effet immédiatement ou exécuter `firewall-cmd --runtime-to-permanent` pour définir la configuration actuelle comme persistante</ins>
+**Toutes les opérations réalisées doivent être valider avec `firewall-cmd --reload` si l'option `--permanent` a été passée pour prendre effet immédiatement ou exécuter `firewall-cmd --runtime-to-permanent` pour définir la configuration actuelle comme persistante**
 
 ---
 
