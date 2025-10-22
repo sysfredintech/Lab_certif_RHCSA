@@ -183,7 +183,7 @@ success
 firewall-cmd --list-ports --permanent 
 8080/tcp
 ```
-- Pour une plage de port
+- Pour une plage de ports
 ```bash
 firewall-cmd --add-port=8081-8088/tcp --permanent 
 success
@@ -293,7 +293,7 @@ success
 
 ---
 
-## Configuration de mises à jour dynamiques par fichier de listes avec IPsets
+##  Configuration de mises à jour dynamiques par fichier de listes avec IPsets
 
 - Lister les types IP set utilisables
 ```bash
@@ -416,7 +416,7 @@ success
 
 ## Les rich rules (définition de règles fines)
 
-**Ces règles une pripriéte plus élevée**
+**Ces règles ont une pripriéte plus élevée**
 
 - Refuser une ip pour le service ssh
 ```bash
