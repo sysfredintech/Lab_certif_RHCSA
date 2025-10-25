@@ -131,9 +131,8 @@ ausearch -m AVC --format text
 ```bash
 semanage port -l | grep ssh
 ```
-```
-ssh_port_t                     tcp      22
-```
+`ssh_port_t                     tcp      22`
+
 _Seul le port 22 est admis_
 
 - Ajouter le port tcp 2222 au type ssh_port_t 
@@ -145,9 +144,8 @@ semanage port -a -t ssh_port_t -p tcp 2222
 ```bash
 semanage port -l | grep ssh
 ```
-```
-ssh_port_t                     tcp      2222, 22
-```
+`ssh_port_t                     tcp      2222, 22`
+
 _On peut maintenant définir le port 2222 comme port d'écoute dans /etc/ssh/sshd_config_
 
 ---
@@ -172,9 +170,8 @@ _On peut maintenant définir le port 2222 comme port d'écoute dans /etc/ssh/ssh
 ```bash
 cat /etc/group | grep labsamba
 ```
-```
-labsamba:x:1004:labuser1,labuser2
-```
+`labsamba:x:1004:labuser1,labuser2`
+
 - Un dossier _/srv/labshare_ appartenant au groupe _labsamba_ avec les permissions _2775_ contenant 2 fichiers
 ```bash
 ls -la /srv/labshare/
@@ -293,9 +290,7 @@ semanage boolean -l
 ```bash
 semanage boolean -l | grep samba_export_all_rw
 ```
-```
-samba_export_all_rw            (fermé,fermé)  Allow samba to share any file/directory read/write.
-```
+`samba_export_all_rw            (fermé,fermé)  Allow samba to share any file/directory read/write.`
 
 **Etat actuel `fermé` - Etat par défaut `fermé`**
 
@@ -306,9 +301,7 @@ setsebool samba_export_all_rw 1
 ```bash
 semanage boolean -l | grep samba_export_all_rw
 ```
-```
-samba_export_all_rw            (ouvert,fermé)  Allow samba to share any file/directory read/write.
-```
+`samba_export_all_rw            (ouvert,fermé)  Allow samba to share any file/directory read/write.`
 
 **Etat actuel `ouvert` - Etat par défaut `fermé`**
 
@@ -351,9 +344,7 @@ setsebool -P samba_export_all_rw 1
 ```bash
 semanage boolean -l | grep samba_export_all_rw
 ```
-```
-samba_export_all_rw            (ouvert,ouvert)  Allow samba to share any file/directory read/write.
-```
+`samba_export_all_rw            (ouvert,ouvert)  Allow samba to share any file/directory read/write.`
 
 **Etat actuel `ouvert` - Etat par défaut `ouvert`**
 
@@ -366,9 +357,7 @@ setsebool -P samba_export_all_rw 0
 ```bash
 semanage boolean -l | grep samba_export_all_rw
 ```
-```
-samba_export_all_rw            (fermé,fermé)  Allow samba to share any file/directory read/write.
-```
+`samba_export_all_rw            (fermé,fermé)  Allow samba to share any file/directory read/write.`
 
 **Etat actuel `fermé` - Etat par défaut `fermé`**
 
@@ -427,9 +416,7 @@ où FILE_TYPE est l'une des valeurs suivantes : faillog_t, postgresql_db_t, pos
 ```bash
 matchpathcon /var/lib/pgsql/data/
 ```
-```
-/var/lib/pgsql/data	system_u:object_r:postgresql_db_t:s0
-```
+`/var/lib/pgsql/data	system_u:object_r:postgresql_db_t:s0`
 
 ```bash
 chcon -R -t postgresql_db_t /opt/db_lab/
@@ -582,9 +569,7 @@ SELinux interdit à /usr/sbin/httpd d'utiliser l'accès getattr sur le fichier /
 ```bash
 ls -Z /var/labwww/html/
 ```
-```
-unconfined_u:object_r:var_t:s0 index.html
-```
+`unconfined_u:object_r:var_t:s0 index.html`
 
 - Vérifier le contexte de sécurité appliqué au processus httpd
 
@@ -610,9 +595,7 @@ seinfo -t | grep http
 ```bash
 matchpathcon /var/www
 ```
-```
-/var/www	system_u:object_r:httpd_sys_content_t:s0
-```
+`/var/www	system_u:object_r:httpd_sys_content_t:s0`
 
 - Définir la bonne étiquette pour le dossier _/var/labwww_ 
 
@@ -639,9 +622,7 @@ Relabeled /var/labwww/html/index.html from unconfined_u:object_r:var_t:s0 to unc
 ```bash
 ls -dZ /var/labwww/html/
 ```
-```
-unconfined_u:object_r:httpd_sys_content_t:s0 /var/labwww/html/
-```
+`unconfined_u:object_r:httpd_sys_content_t:s0 /var/labwww/html/`
 
 ```bash
 curl http://localhost:8088/index.html

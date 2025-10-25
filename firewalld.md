@@ -329,10 +329,12 @@ firewall-cmd --runtime-to-permanent
 - Vérification
 ```bash
 firewall-cmd  --list-sources --zone trusted
-192.168.10.181
-firewall-cmd  --list-sources --zone work
-192.168.10.0/24
 ```
+`192.168.10.181`
+```bash
+firewall-cmd  --list-sources --zone work
+```
+`192.168.10.0/24`
 
 - Supprimer une source
 ```bash
