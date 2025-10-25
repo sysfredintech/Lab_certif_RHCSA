@@ -16,6 +16,8 @@
 
 ```bash
 systemctl status firewalld
+```
+```
 ● firewalld.service - firewalld - dynamic firewall daemon
      Loaded: loaded (/usr/lib/systemd/system/firewalld.service; enabled; preset: enabled)
      Active: active (running) since Mon 2025-10-20 11:31:32 CEST; 13min ago
@@ -34,8 +36,9 @@ oct. 20 11:31:32 rhel-srv systemd[1]: Started firewalld.service - firewalld - dy
 ```
 ```bash
 firewall-cmd --state
-running
 ```
+`running`
+
 _Le service est bien actif_
 
 ---
@@ -50,17 +53,20 @@ _Le service est bien actif_
 
 ```bash
 firewall-cmd --get-zones
-block dmz drop external home internal nm-shared public trusted work
 ```
+`block dmz drop external home internal nm-shared public trusted work`
 ```bash
 firewall-cmd --get-default-zone 
-public
 ```
+`public`
+
 _La zone utilisée par défaut est `public`_
 
 - Lister les informations pour la zone par défaut _public_
 ```bash
 firewall-cmd --list-all  --zone=public
+```
+```
 public (default, active)
   target: default
   ingress-priority: 0
@@ -92,18 +98,22 @@ _renvoi une énumération exhaustive de tous les services_
 
 ```bash
 firewall-cmd --list-services
-cockpit dhcpv6-client ssh
 ```
+`cockpit dhcpv6-client ssh`
+
 _Liste les services autorisés dans la zone courante (public)_
 
 ```bash
-firewall-cmd --list-services --zone internal 
-cockpit dhcpv6-client mdns samba-client ssh
+firewall-cmd --list-services --zone internal
 ```
+`cockpit dhcpv6-client mdns samba-client ssh`
+
 _liste les services autorisés dans une zone_
 
 ```bash
 firewall-cmd --info-service=http
+```
+```
 http
   ports: 80/tcp
   protocols: 
@@ -120,34 +130,43 @@ _Fourni des informations sur le service `http` en particulier_
 - Pour autoriser le service http de manière temporaire dans la zone courante
 ```bash
 firewall-cmd --add-service=http
-success
 ```
+`success`
+
 ```bash
 firewall-cmd --list-services
-cockpit dhcpv6-client http ssh
 ```
+`cockpit dhcpv6-client http ssh`
+
 - Il faut ajouter `--permanent` pour que cette configuration soit persistente
 ```bash
 firewall-cmd --add-service=http --permanent
-success
-firewall-cmd --reload 
-success
 ```
+`success`
 ```bash
-firewall-cmd --list-services --permanent 
-cockpit dhcpv6-client http ssh
+firewall-cmd --reload
 ```
+`success`
+
+```bash
+firewall-cmd --list-services --permanent
+```
+`cockpit dhcpv6-client http ssh`
+
 - Pour autoriser un service dans une zone défini
 ```bash
 firewall-cmd --add-service=http --permanent --zone work
-success
-firewall-cmd --reload 
-success
 ```
+`success`
+```bash
+firewall-cmd --reload 
+```
+`success`
+
 ```bash
 firewall-cmd --list-services --zone=work
-cockpit dhcpv6-client http ssh
 ```
+`cockpit dhcpv6-client http ssh`
 
 ---
 
@@ -166,41 +185,55 @@ _Aucun port n'est ouvert actuellement_
 - De façon temporaire
 ```bash
 firewall-cmd --add-port=8080/tcp
-success
 ```
+`success`
+
 ```bash
 firewall-cmd --list-ports 
-8080/tcp
 ```
+`8080/tcp`
+
 - De façon permanente
 ```bash
 firewall-cmd --add-port=8080/tcp --permanent 
-success
-firewall-cmd --reload 
-success
 ```
+`success`
 ```bash
-firewall-cmd --list-ports --permanent 
-8080/tcp
+firewall-cmd --reload 
 ```
+`success`
+```bash
+firewall-cmd --list-ports --permanent
+```
+`8080/tcp`
+
 - Pour une plage de ports
 ```bash
 firewall-cmd --add-port=8081-8088/tcp --permanent 
-success
-firewall-cmd --reload 
-success
-firewall-cmd --list-ports --permanent 
-8080/tcp 8081-8088/tcp
 ```
+`success`
+```bash
+firewall-cmd --reload 
+```
+`success`
+```bash
+firewall-cmd --list-ports --permanent 
+```
+`8080/tcp 8081-8088/tcp`
+
 - Fermer un port
 ```bash
 firewall-cmd --remove-port=8080/tcp --permanent
-success
-firewall-cmd --reload 
-success
-firewall-cmd --list-ports --permanent 
-8081-8088/tcp
 ```
+`success`
+```bash
+firewall-cmd --reload 
+```
+`success`
+```bash
+firewall-cmd --list-ports --permanent 
+```
+`8081-8088/tcp`
 
 ---
 
@@ -213,6 +246,8 @@ firewall-cmd --list-ports --permanent
 - Lister les interfaces et leur zone
 ```bash
 firewall-cmd --get-active-zones
+```
+```
 public (default)
   interfaces: br-ethlab ens19 ens18
 ```
@@ -220,10 +255,13 @@ public (default)
 - Changer la zone d'une interface
 ```bash
 firewall-cmd --change-interface=ens19 --zone=work
-success
 ```
+`success`
+
 ```bash
 firewall-cmd --get-active-zones
+```
+```
 public (default)
   interfaces: br-ethlab ens18
 work
@@ -233,10 +271,13 @@ work
 - Retirer une interface d'une zone
 ```bash
 firewall-cmd --remove-interface=ens19 --zone=work
-success
 ```
+`success`
+
 ```bash
 firewall-cmd --get-active-zones
+```
+```
 public (default)
   interfaces: br-ethlab ens18
 ```
@@ -244,13 +285,20 @@ public (default)
 - Ajouter une interface à une zone de façon permanente
 ```bash
 firewall-cmd --add-interface=ens19 --zone=dmz --permanent
+```
+```
 The interface is under control of NetworkManager, setting zone to 'dmz'.
-success
-firewall-cmd --reload 
 success
 ```
 ```bash
+firewall-cmd --reload 
+```
+`success`
+
+```bash
 firewall-cmd --get-active-zones
+```
+```
 dmz
   interfaces: ens19
 public (default)
@@ -262,18 +310,21 @@ public (default)
 - Ajouter une adresse IP à la zone _trusted_
 ```bash
 firewall-cmd --zone=trusted --add-source=192.168.10.181
-success
 ```
+`success`
+
 - Ajouter un sous-réseau à la zone work
 ```bash
 firewall-cmd --zone=work --add-source=192.168.10.0/24
-success
 ```
+`success`
+
 - Application de la configuration
 ```bash
 firewall-cmd --runtime-to-permanent 
-success
 ```
+`success`
+
 
 - Vérification
 ```bash
@@ -286,10 +337,12 @@ firewall-cmd  --list-sources --zone work
 - Supprimer une source
 ```bash
 firewall-cmd --remove-source=192.168.10.181 --zone=trusted 
-success
-firewall-cmd --runtime-to-permanent 
-success
 ```
+`success`
+```bash
+firewall-cmd --runtime-to-permanent 
+```
+`success`
 
 ---
 
@@ -298,39 +351,45 @@ success
 - Lister les types IP set utilisables
 ```bash
 firewall-cmd --get-ipset-types
+```
+```
 hash:ip hash:ip,mark hash:ip,port hash:ip,port,ip hash:ip,port,net hash:mac hash:net hash:net,iface hash:net,net hash:net,port hash:net,port,net
 ```
 
 - Créer une IP set avec un nom explicite
 ```bash
 firewall-cmd --new-ipset=allowlist --type=hash:ip --permanent
-success
 ```
+`success`
 
 - Incrémenter la liste _allowlist_ avec des adresses IP
 ```bash
 firewall-cmd --ipset=allowlist --add-entry=192.168.10.55 --permanent
-success
 ```
+`success`
 
 - Créer une règle basée sur la liste _allowlist_ pour la zone _trusted_
 ```bash
 firewall-cmd --add-source=ipset:allowlist --zone=trusted --permanent
-success
-firewall-cmd --reload
-success
 ```
+`success`
+```bash
+firewall-cmd --reload
+```
+`success`
 
 - Afficher les listes IP set
 ```bash
 firewall-cmd --get-ipsets
-allowlist
 ```
+`allowlist`
 
 - Afficher le contenu d'une liste IP set
 **Les listes sont stockées dans `/etc/firewalld/ipsets/`**
 ```bash
 cat /etc/firewalld/ipsets/allowlist.xml
+```
+```
 <?xml version="1.0" encoding="utf-8"?>
 <ipset type="hash:ip">
   <entry>192.168.10.55</entry>
@@ -339,6 +398,8 @@ cat /etc/firewalld/ipsets/allowlist.xml
 Ou
 ```bash
 firewall-cmd --info-ipset=allowlist
+```
+```
 allowlist
   type: hash:ip
   options: 
@@ -348,26 +409,33 @@ allowlist
 - Ajouter dynamiquement des adresses IP dans la liste _allowlist_
 ```bash
 firewall-cmd --ipset=allowlist --add-entry=192.168.10.45 --permanent
-success
-firewall-cmd --reload
-success
 ```
+`success`
+```bash
+firewall-cmd --reload
+```
+`success`
 
 - Créer une liste IP set pour les sous-réseaux nommé _allownetlist_
 ```bash
 firewall-cmd --new-ipset=allownetlist --type=hash:net --permanent
-success
 ```
+`success`
+
 ```bash
 firewall-cmd --ipset=allownetlist --add-entry=192.168.0.0/24 --permanent
-success
-firewall-cmd --reload
-success
 ```
+`success`
+```bash
+firewall-cmd --reload
+```
+`success`
 
 - Vérifications
 ```bash
 firewall-cmd --info-ipset=allowlist
+```
+```
 allowlist
   type: hash:ip
   options: 
@@ -375,6 +443,8 @@ allowlist
 ```
 ```bash
 firewall-cmd --info-ipset=allownetlist
+```
+```
 allownetlist
   type: hash:net
   options: 
@@ -384,22 +454,27 @@ allownetlist
 - Créer un fichier contenant une liste d'adresses IP pour alimenter une liste IP set
 ```bash
 vim iplist
-
+```
+```
 192.168.10.200
 192.168.10.201
 192.168.10.203
 ```
 ```bash
 firewall-cmd --new-ipset=filelist --type=hash:ip --permanent
-success
 ```
+`success`
+
 ```bash
 firewall-cmd --ipset=filelist --add-entries-from-file=iplist --permanent
-success
 ```
+`success`
+
 - Verification
 ```bash
 firewall-cmd --ipset=filelist --get-entries
+```
+```
 192.168.10.200
 192.168.10.201
 192.168.10.203
@@ -407,10 +482,12 @@ firewall-cmd --ipset=filelist --get-entries
 - Supprimer le contenu précedement ajouté
 ```bash
 firewall-cmd --ipset=filelist --remove-entries-from-file=iplist --permanent
-success
-firewall-cmd --reload
-success
 ```
+`success`
+```bash
+firewall-cmd --reload
+```
+`success`
 
 ---
 
@@ -421,24 +498,26 @@ success
 - Refuser une ip pour le service ssh
 ```bash
 firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.10.181" service name="ssh" drop' --permanent
-success
 ```
+`success`
 
 - Autoriser un sous-réseau pour le service http
 ```bash
 firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.1.0/24" service name=http accept' --permanent
-success
 ```
+`success`
 
 - Valider
 ```bash
 firewall-cmd --reload
-success
 ```
+`success`
 
 - Vérification
 ```bash
 firewall-cmd --list-rich-rules 
+```
+```
 rule family="ipv4" source address="192.168.1.0/24" service name="http" accept
 rule family="ipv4" source address="192.168.10.181" service name="ssh" drop
 ```
@@ -446,15 +525,20 @@ rule family="ipv4" source address="192.168.10.181" service name="ssh" drop
 - Redirection de port
 ```bash
 firewall-cmd --add-rich-rule='rule family="ipv4" forward-port port="8888" protocol="tcp" to-port="80"' --permanent --zone=public
-success
-firewall-cmd --reload
-success
 ```
+`success`
+```bash
+firewall-cmd --reload
+```
+`success`
+
 _Redirige le port _8888_ vers le port 80 dans la zone public_
 
 - Vérification
 ```bash
 firewall-cmd --list-rich-rules --zone=public 
+```
+```
 rule family="ipv4" forward-port port="8888" protocol="tcp" to-port="80"
 rule family="ipv4" source address="192.168.1.0/24" service name="http" accept
 rule family="ipv4" source address="192.168.10.181" service name="ssh" drop
@@ -464,8 +548,8 @@ rule family="ipv4" source address="192.168.10.181" service name="ssh" drop
 ```bash
 firewall-cmd --remove-rich-rule='rule family="ipv4" forward-port port="8888" protocol="tcp" to-port="80"'
 firewall-cmd --reload
-success
 ```
+`success`
 
 ---
 
@@ -473,29 +557,30 @@ success
 
 **L'option `--direct` permet d'utiliser la syntaxe iptables/ip6tables à travers firewalld, cela contourne le système par zones et permet d'accéder aux tables et chaînes bas niveau. Le risque de conflis est important avec les règles natives de firewalld**
 
-- Bloquer le trafic sortant vers le port 53 (dns)
+1. Bloquer le trafic sortant vers le port 53 (dns)
 ```bash
 firewall-cmd --direct --add-rule ipv4 filter OUTPUT 0 -p udp --dport 53 -j DROP
-success
 ```
-`ipv4` &rarr; famille d'adressage ip
-`filter OUTPUT` &rarr; trafic sortant
-`0` &rarr; priorité la plus haute
-`-p udp` &rarr; protocole choisi
-`--dport 53` &rarr; port de destination choisi
-`-j DROP` &rarr; décision
+`success`
 
-- Vérification
+- `ipv4` &rarr; famille d'adressage ip
+- `filter OUTPUT` &rarr; trafic sortant
+- `0` &rarr; priorité la plus haute
+- `-p udp` &rarr; protocole choisi
+- `--dport 53` &rarr; port de destination choisi
+- `-j DROP` &rarr; décision
+
+2. Vérification
 ```bash
 firewall-cmd --direct --get-all-rules 
-ipv4 filter OUTPUT 0 -p udp --dport 53 -j DROP
 ```
+`ipv4 filter OUTPUT 0 -p udp --dport 53 -j DROP`
 
-- Supprimer la règle précédemment créé
+3. Supprimer la règle précédemment créé
 ```bash
 firewall-cmd --direct --remove-rule ipv4 filter OUTPUT 0 -p udp --dport 53 -j DROP
-success
 ```
+`success`
 
 ---
 
@@ -514,16 +599,17 @@ firewall-cmd --list-all-zones > firewalld_config.old
 - Créer une archive tar du dossier _/etc/firewalld_
 ```bash
 tar -cf firewalld_backup.tar /etc/firewalld/
-tar: Suppression de « / » au début des noms des membres
 ```
 
 - Réinitialiser la configuration d'origine &rarr; **détruit toute la configuration**
 ```bash
 firewall-cmd --reset-to-defaults
-success
-firewall-cmd --reload 
-success
 ```
+`success`
+```bash
+firewall-cmd --reload 
+```
+`success`
 
 - Vérification
 ```bash
@@ -537,12 +623,14 @@ tar -xf firewalld_backup.tar -C /
 ```
 ```bash
 firewall-cmd --reload 
-success
 ```
+`success`
 
 - Vérification
 ```bash
 firewall-cmd --list-all --zone=public
+```
+```
 public (default, active)
   target: default
   ingress-priority: 0
@@ -582,51 +670,45 @@ Les anciennes règles sont à nouveau en place
 1. Création de la nouvelle zone
 ```bash
 firewall-cmd --new-zone=labzone --permanent
-success
 ```
 
 2. Définition d'une nouvelle règle autorisant http dans la zone _labzone_
 ```bash
 firewall-cmd --add-service=http --zone=labzone --permanent
-success
 ```
 
 3. Définition d'une règle pour autoriser l'accès sur le port 2222/tcp dans la zone _labzone_
 ```bash
 firewall-cmd --add-port=2222/tcp --zone=labzone --permanent
-success
 ```
 
 4. Définition d'une règle pour interdire le port 2222/tcp au sous-réseau _192.168.20.0/24_ dans la zone _labzone_
 ```bash
 firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.20.0/24" port port="2222" protocol="tcp" drop' --zone=labzone --permanent
-success
 ```
 
 5. Ajouter l'interface _ens19_ dans la zone _labzone_
 ```bash
 firewall-cmd --change-interface=ens19 --zone=labzone --permanent
 The interface is under control of NetworkManager, setting zone to 'labzone'.
-success
 ```
 
 6. Appliquer la configuration et définir _labzone_ comme zone par défaut
 ```bash
 firewall-cmd --reload 
-success
 ```
 ```bash
 firewall-cmd --set-default-zone=labzone
-success
 ```
 ```bash
 firewall-cmd --runtime-to-permanent 
-success
 ```
 
 7. Verification
 ```bash
 firewall-cmd --list-all --zone=labzone
+```
+```
 labzone (default, active)
   target: default
   ingress-priority: 0

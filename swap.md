@@ -22,6 +22,8 @@
 Lister les fichiers et partitions déjà utilisés pour le swap
 ```bash
 swapon -s
+```
+```
 Filename				Type		Size		Used		Priority
 /dev/dm-1                               partition	839676		0		-2
 ```
@@ -29,6 +31,8 @@ Filename				Type		Size		Used		Priority
 
 ```bash
 lsblk | grep -i swap
+```
+```
   └─rhel-swap    253:1    0   820M  0 lvm  [SWAP]
 ```
 Il s'agit bien d'une partition de swap crée sur un LV nommé `rhel-swap` de 820Mo
@@ -41,6 +45,8 @@ Il s'agit bien d'une partition de swap crée sur un LV nommé `rhel-swap` de 820
 
 ```bash
 dd if=/dev/zero of=/swaplab1 bs=1M count=256
+```
+```
 256+0 enregistrements lus
 256+0 enregistrements écrits
 268435456 octets (268 MB, 256 MiB) copiés, 0,0329612 s, 8,1 GB/s
@@ -62,6 +68,8 @@ chmod 600 /swaplab1
 
 ```bash
 mkswap /swaplab1 -L swaplab1
+```
+```
 Setting up swapspace version 1, size = 256 MiB (268431360 bytes)
 LABEL=swaplab1, UUID=a12193c7-4cea-44c9-8428-af14ab8e05d3
 ```
@@ -76,6 +84,8 @@ swapon /swaplab1
 
 ```bash
 swapon -s
+```
+```
 Filename				Type		Size		Used		Priority
 /dev/dm-1                               partition	839676		0		-2
 /swaplab1                               file		262140		0		-3
@@ -87,7 +97,7 @@ Filename				Type		Size		Used		Priority
 vim /etc/fstab
 ```
 Ajouter la ligne suivante
-```bash
+```
 /swaplab1 swap swap defaults 0 0
 ```
 
@@ -99,6 +109,8 @@ Ajouter la ligne suivante
 
 ```bash
 lsblk
+```
+```
 NAME             MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
 sda                8:0    0     8G  0 disk 
 ├─sda1             8:1    0     1M  0 part 
@@ -121,7 +133,8 @@ Ici on utilise sdd `sdd                8:48   0     4G  0 disk`
 
 ```bash
 fdisk /dev/sdd
-
+```
+```
 Welcome to fdisk (util-linux 2.40.2).
 Changes will remain in memory only, until you decide to write them.
 Be careful before using the write command.
@@ -136,6 +149,8 @@ On a créé une partition primaire de 256Mo de type Linux Swap
 Vérification
 ```bash
 lsblk | grep sdd
+```
+```
 sdd                8:48   0     4G  0 disk 
 └─sdd1             8:49   0   256M  0 part
 ```
@@ -144,6 +159,8 @@ sdd                8:48   0     4G  0 disk
 
 ```bash
 mkswap /dev/sdd1 -L swaplab
+```
+```
 Setting up swapspace version 1, size = 256 MiB (268431360 bytes)
 LABEL=swaplab, UUID=5e033386-f145-4bcb-9590-062d9faf5fd8
 ```
@@ -158,6 +175,8 @@ swapon /dev/sdd1
 
 ```bash
 swapon -s
+```
+```
 Filename				Type		Size		Used		Priority
 /dev/dm-1                               partition	839676		0		-2
 /swaplab1                               file		262140		0		-3
@@ -171,6 +190,8 @@ Filename				Type		Size		Used		Priority
 
 ```bash
 swapon -s
+```
+```
 Filename				Type		Size		Used		Priority
 /dev/dm-1                               partition	839676		0		-2
 /swaplab1                               file		262140		0		-3
@@ -184,6 +205,8 @@ swapoff /dev/sdd1
 ```
 ```bash
 swapon -s
+```
+```
 Filename				Type		Size		Used		Priority
 /dev/dm-1                               partition	839676		0		-2
 /swaplab1                               file		262140		0		-3
@@ -206,6 +229,8 @@ swapon /dev/sdd1 -p 50
 
 ```bash
 swapon -s
+```
+```
 Filename				Type		Size		Used		Priority
 /dev/dm-1                               partition	839676		0		-2
 /swaplab1                               file		262140		0		-3
@@ -221,6 +246,8 @@ Filename				Type		Size		Used		Priority
 
 ```bash
 blkid | grep swap
+```
+```
 /dev/mapper/rhel-swap: UUID="512ad036-a4f3-40cb-ba3e-2133be9b2589" TYPE="swap"
 /dev/sdd1: UUID="5e033386-f145-4bcb-9590-062d9faf5fd8" TYPE="swap" PARTUUID="c598ece6-01"
 ```
@@ -255,6 +282,8 @@ swapoff /dev/sdd1
 ```
 ```bash
 swapon -av
+```
+```
 swapon: /dev/mapper/rhel-swap: already active -- ignored
 swapon: /dev/sdd1: found signature [pagesize=4096, signature=swap]
 swapon: /dev/sdd1: pagesize=4096, swapsize=268435456, devsize=268435456
@@ -262,6 +291,8 @@ swapon /dev/sdd1
 ```
 ```bash
 swapon -s
+```
+```
 Filename				Type		Size		Used		Priority
 /dev/dm-1                               partition	839676		0		-2
 /swaplab1                               file		262140		0		-3
@@ -284,6 +315,8 @@ swapoff /dev/sdd1
 ```
 ```bash
 swapon -av
+```
+```
 swapon: /dev/mapper/rhel-swap: already active -- ignored
 swapon: /dev/sdd1: found signature [pagesize=4096, signature=swap]
 swapon: /dev/sdd1: pagesize=4096, swapsize=268435456, devsize=268435456
@@ -291,6 +324,8 @@ swapon /dev/sdd1
 ```
 ```bash
 swapon -s
+```
+```
 Filename				Type		Size		Used		Priority
 /dev/dm-1                               partition	839676		0		-2
 /swaplab1                               file		262140		0		-3
@@ -306,7 +341,7 @@ Filename				Type		Size		Used		Priority
 swapoff /dev/sdd1
 ```
 Supprimer la ligne suivante dans /etc/fstab:
-```bash
+```
 UUID=5e033386-f145-4bcb-9590-062d9faf5fd8 none                    swap    defaults,pri=50         0 0
 ```
 2. Supprimer la partition /dev/sdd1
@@ -320,6 +355,8 @@ fdisk /dev/sdd
 
 ```bash
 vgcreate vgswap /dev/sdd
+```
+```
   Physical volume "/dev/sdd" successfully created.
   Volume group "vgswap" successfully created
 ```
@@ -328,6 +365,8 @@ vgcreate vgswap /dev/sdd
 
 ```bash
 lvcreate vgswap -n swaplab2 -L 256M
+```
+```
   Logical volume "swaplab2" created.
 ```
 
@@ -335,10 +374,14 @@ lvcreate vgswap -n swaplab2 -L 256M
 
 ```bash
 lvdisplay vgswap/swaplab2 | grep -i path
+```
+```
   LV Path                /dev/vgswap/swaplab2
 ```
 ```bash
 mkswap /dev/vgswap/swaplab2
+```
+```
 Setting up swapspace version 1, size = 256 MiB (268431360 bytes)
 no label, UUID=9a939711-d74c-418e-8607-646b14fd7b34
 ```
@@ -353,6 +396,8 @@ no label, UUID=9a939711-d74c-418e-8607-646b14fd7b34
 
 ```bash
 swapon -av
+```
+```
 swapon: /dev/mapper/rhel-swap: already active -- ignored
 swapon: /dev/mapper/vgswap-swaplab2: found signature [pagesize=4096, signature=swap]
 swapon: /dev/mapper/vgswap-swaplab2: pagesize=4096, swapsize=268435456, devsize=268435456
@@ -363,12 +408,16 @@ swapon /dev/mapper/vgswap-swaplab2
 
 ```bash
 swapon -s
+```
+```
 Filename				Type		Size		Used		Priority
 /dev/dm-1                               partition	839676		0		-2
 /dev/dm-4                               partition	262140		0		-3
 ```
 ```bash
 lsblk | grep -i swap
+```
+```
   └─rhel-swap     253:1    0   820M  0 lvm  [SWAP]
 └─vgswap-swaplab2 253:4    0   256M  0 lvm  [SWAP]
 ```
@@ -381,6 +430,8 @@ lsblk | grep -i swap
 
 ```bash
 dmesg | grep -i swap | tail -5
+```
+```
 [    2.776404] systemd[1]: Activating swap dev-disk-by\x2duuid-512ad036\x2da4f3\x2d40cb\x2dba3e\x2d2133be9b2589.swap - /dev/disk/by-uuid/512ad036-a4f3-40cb-ba3e-2133be9b2589...
 [    2.795855] Adding 839676k swap on /dev/mapper/rhel-swap.  Priority:-2 extents:1 across:839676k 
 [    2.836042] systemd[1]: Activated swap dev-disk-by\x2duuid-512ad036\x2da4f3\x2d40cb\x2dba3e\x2d2133be9b2589.swap - /dev/disk/by-uuid/512ad036-a4f3-40cb-ba3e-2133be9b2589.
@@ -392,7 +443,9 @@ dmesg | grep -i swap | tail -5
 2. Vérification d'un fichier de swap 
 
 ```bash
-file /swaplab1 
+file /swaplab1
+```
+```
 /swaplab1: Linux swap file, 4k page size, little endian, version 1, size 65535 pages, 0 bad pages, LABEL=swaplab, UUID=027980ea-139a-4af3-9555-2e5b82c43ab5
 ```
 
@@ -400,6 +453,8 @@ file /swaplab1
 
 ```bash
 cat /proc/meminfo | grep -i swap
+```
+```
 SwapCached:            0 kB
 SwapTotal:       1363956 kB
 SwapFree:        1363956 kB
@@ -408,6 +463,8 @@ Zswapped:              0 kB
 ```
 ```bash
 free -m
+```
+```
                total        used        free      shared  buff/cache   available
 Mem:            1705         504         834           4         554        1201
 Swap:           1331           0        1331
@@ -420,33 +477,36 @@ Swap:           1331           0        1331
 - Détermine à partir de quel niveau d'utilisation de la RAM le système commence à swapper
 ```bash
 cat /proc/sys/vm/swappiness 
-30
 ```
+`30`
+
 Valeur par défaut du système = 30
 
 - Pour modifier cette valeur temporairement
 
 ```bash
 sysctl vm.swappiness=60
-vm.swappiness = 60
 ```
+`vm.swappiness = 60`
+
 - Vérification
 ```bash
-cat /proc/sys/vm/swappiness 
-60
+cat /proc/sys/vm/swappiness
 ```
+`60`
+
 - Pour modifier cette valeur de manière persistante
 ```bash
 vim /etc/sysctl.conf
 ```
 Ajouter cette ligne dans le fichier (ou modifier la valeur si déjà présente)
-```bash
+```
 vm.swappiness=60
 ```
 ```bash
 sysctl -p
-vm.swappiness = 60
 ```
+`vm.swappiness = 60`
 
 ---
 

@@ -5,13 +5,13 @@
 SELinux fournit un système de sécurité granulaire qui implémente le contrôle d'accès obligatoire (MAC) au niveau du noyau Linux.
 
 
-<ins>SELinux peut être activé ou désactivé totalement, si activé, deux modes possibles:</ins>
+**SELinux peut être activé ou désactivé totalement, si activé, deux modes possibles:**
 1. Enforcing = strict &rarr; applique les restrictions
 >Le mode "Enforcing" est le mode de fonctionnement par défaut et recommandé. En mode "Enforcing", SELinux fonctionne normalement, appliquant la politique de sécurité chargée sur l'ensemble du système.
 2. Permissive = permissif &rarr; Journalise uniquement
 >En mode permissif, le système agit comme si SELinux appliquait la politique de sécurité chargée, notamment en étiquetant les objets et en émettant des entrées de refus d'accès dans les journaux, mais il ne refuse en fait aucune opération. Bien qu'il ne soit pas recommandé pour les systèmes de production, le mode permissif peut être utile pour le développement et le débogage de la politique SELinux.
 
-<ins>Si SELinux est désactivé:</ins>
+**Si SELinux est désactivé:**
 
 - Disabled = Désactivé &rarr; Dangereux pour l'intégrité du système
 >Le mode désactivé est fortement déconseillé ; non seulement le système évite d'appliquer la politique SELinux, mais il évite également d'étiqueter les objets persistants tels que les fichiers, ce qui rend difficile l'activation de SELinux à l'avenir.
@@ -22,6 +22,8 @@ SELinux fournit un système de sécurité granulaire qui implémente le contrôl
 
 ```bash
 sestatus
+```
+```
 SELinux status:                 enabled
 SELinuxfs mount:                /sys/fs/selinux
 SELinux root directory:         /etc/selinux
@@ -42,7 +44,7 @@ Ici:
 - `SELinux status:                 enabled`
 - `Enforcing`
 
-<ins>SELinux est activé et fonctionne en mode enforcing</ins>
+_SELinux est activé et fonctionne en mode enforcing_
 
 **Pour passer en mode permissive de manière temporaire**
 
@@ -56,7 +58,7 @@ getenforce
 ```
 Renvoi: `Permissive`
 
-<ins>Ce paramétrage sera réinitialisé au redémarrage du système pour repasser en mode Enforcing qui est le mode par défaut</ins>
+_Ce paramétrage sera réinitialisé au redémarrage du système pour repasser en mode Enforcing qui est le mode par défaut_
 
 **Pour changer de mode de façon permanente**
 
@@ -128,6 +130,8 @@ ausearch -m AVC --format text
 
 ```bash
 semanage port -l | grep ssh
+```
+```
 ssh_port_t                     tcp      22
 ```
 _Seul le port 22 est admis_
@@ -140,6 +144,8 @@ semanage port -a -t ssh_port_t -p tcp 2222
 - Vérification
 ```bash
 semanage port -l | grep ssh
+```
+```
 ssh_port_t                     tcp      2222, 22
 ```
 _On peut maintenant définir le port 2222 comme port d'écoute dans /etc/ssh/sshd_config_
@@ -165,11 +171,15 @@ _On peut maintenant définir le port 2222 comme port d'écoute dans /etc/ssh/ssh
 - Un groupe _labsamba_ contenant 2 utilisateurs _labuser1_ et _labuser2_
 ```bash
 cat /etc/group | grep labsamba
+```
+```
 labsamba:x:1004:labuser1,labuser2
 ```
 - Un dossier _/srv/labshare_ appartenant au groupe _labsamba_ avec les permissions _2775_ contenant 2 fichiers
 ```bash
 ls -la /srv/labshare/
+```
+```
 total 0
 drwxrwsr-x. 2 root     labsamba 44 15 oct.  14:25 .
 drwxr-xr-x. 3 root     root     22 15 oct.  14:20 ..
@@ -179,6 +189,8 @@ drwxr-xr-x. 3 root     root     22 15 oct.  14:20 ..
 - Un fichier nommé _testsel1.txt_ dans /home/labuser1
 ```bash
 ls -l /home/labuser1
+```
+```
 total 0
 -rw-r--r--. 1 labuser1 labuser1 0 15 oct.  15:00 testsel1.txt
 ```
@@ -187,6 +199,8 @@ total 0
 
 ```bash
 su - labuser1
+```
+```
 smbclient -U labuser1 //localhost/labshare
 Password for [SAMBA\labuser1]:
 Try "help" to get a list of possible commands.
@@ -207,7 +221,7 @@ smb: \>
 ```bash 
 sealert -l "*"
 ```
-```bash
+```
 SELinux interdit à /usr/sbin/smbd d'utiliser l'accès create sur le fichier testsel1.txt.
 
 *****  Le greffon samba_share (78.9 de confiance) suggère   ******************
@@ -228,7 +242,7 @@ setsebool -P samba_export_all_rw 1
 **Changement de la politique SELinux**
 ```
 
-```bash
+```
 SELinux interdit à /usr/sbin/smbd d'utiliser l'accès getattr sur le fichier /srv/labshare/f_user1.txt.
 
 *****  Le greffon samba_share (70.3 de confiance) suggère   ******************
@@ -258,6 +272,8 @@ setsebool -P samba_export_all_rw 1
 
 ```bash
 ausearch -m AVC --format text
+```
+```
 At 18:42:24 15/10/2025 system, acting as labuser1, unsuccessfully accessed-mac-policy-controlled-object using /usr/sbin/smbd
 At 18:42:24 15/10/2025 system, acting as labuser1, unsuccessfully accessed-mac-policy-controlled-object using /usr/sbin/smbd
 ```
@@ -276,6 +292,8 @@ semanage boolean -l
 
 ```bash
 semanage boolean -l | grep samba_export_all_rw
+```
+```
 samba_export_all_rw            (fermé,fermé)  Allow samba to share any file/directory read/write.
 ```
 
@@ -287,6 +305,8 @@ setsebool samba_export_all_rw 1
 
 ```bash
 semanage boolean -l | grep samba_export_all_rw
+```
+```
 samba_export_all_rw            (ouvert,fermé)  Allow samba to share any file/directory read/write.
 ```
 
@@ -296,6 +316,8 @@ samba_export_all_rw            (ouvert,fermé)  Allow samba to share any file/di
 
 ```bash
 smbclient //localhost/labshare -U labuser1
+```
+```
 Password for [SAMBA\labuser1]:
 Try "help" to get a list of possible commands.
 smb: \> ls
@@ -328,6 +350,8 @@ setsebool -P samba_export_all_rw 1
 
 ```bash
 semanage boolean -l | grep samba_export_all_rw
+```
+```
 samba_export_all_rw            (ouvert,ouvert)  Allow samba to share any file/directory read/write.
 ```
 
@@ -341,6 +365,8 @@ setsebool -P samba_export_all_rw 0
 
 ```bash
 semanage boolean -l | grep samba_export_all_rw
+```
+```
 samba_export_all_rw            (fermé,fermé)  Allow samba to share any file/directory read/write.
 ```
 
@@ -358,8 +384,12 @@ samba_export_all_rw            (fermé,fermé)  Allow samba to share any file/di
 ```bash
 dnf install postgresql-server postgresql-contrib -y
 postgresql-setup --initdb --unit postgresql
+```
+```
  * Initializing database in '/var/lib/pgsql/data'
  * Initialized, logs are in /var/lib/pgsql/initdb_postgresql.log
+```
+```bash
 systemctl start postgresql
 mkdir /opt/db_lab
 chown -R postgres:postgres /opt/db_lab
@@ -369,6 +399,8 @@ chown -R postgres:postgres /opt/db_lab
 
 ```bash
 sudo -u postgres psql -c "CREATE TABLESPACE external LOCATION '/opt/db_lab';"
+```
+```
 ERREUR:  n'a pas pu configurer les droits du répertoire « /opt/db_lab » : Permission non accordée
 ```
 
@@ -378,6 +410,8 @@ ERREUR:  n'a pas pu configurer les droits du répertoire « /opt/db_lab » : Per
 
 ```bash
 sealert -l "*"
+```
+```
 SELinux interdit à /usr/bin/postgres d'utiliser l'accès setattr sur le dossier db_lab.
 Si vous souhaitez autoriser postgres à accéder à setattr sur db_lab directory
 Alors l'étiquette sur db_lab doit être modifiée
@@ -392,6 +426,8 @@ où FILE_TYPE est l'une des valeurs suivantes : faillog_t, postgresql_db_t, pos
 
 ```bash
 matchpathcon /var/lib/pgsql/data/
+```
+```
 /var/lib/pgsql/data	system_u:object_r:postgresql_db_t:s0
 ```
 
@@ -432,7 +468,7 @@ echo "<h1>Hello World</h1>" > /var/labwww/html/index.html
 ```bash
 vim /etc/httpd/conf/httpd.conf
 ```
-```bash
+```
 Listen 8088
 #
 DocumentRoot "/var/labwww/html"
@@ -450,12 +486,16 @@ DocumentRoot "/var/labwww/html"
 
 ```bash
 systemctl start httpd
+```
+```
 Job for httpd.service failed because the control process exited with error code.
 See "systemctl status httpd.service" and "journalctl -xeu httpd.service" for details.
 ```
 
 ```bash
 systemctl status httpd
+```
+```
 oct. 15 10:16:11 rhel-srv httpd[5995]: (13)Permission denied: AH00072: make_sock: could not bind to address [::]:8088
 oct. 15 10:16:11 rhel-srv httpd[5995]: (13)Permission denied: AH00072: make_sock: could not bind to address 0.0.0.0:8088
 ```
@@ -466,6 +506,8 @@ oct. 15 10:16:11 rhel-srv httpd[5995]: (13)Permission denied: AH00072: make_sock
 
 ```bash
 sealert -l "*" | grep SELinux
+```
+```
 SELinux interdit à /usr/sbin/httpd d'utiliser l'accès name_bind sur le tcp_socket port 8088.
 ```
 
@@ -473,6 +515,8 @@ SELinux interdit à /usr/sbin/httpd d'utiliser l'accès name_bind sur le tcp_soc
 
 ```bash
 semanage port -l | grep http
+```
+```
 http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
 http_cache_port_t              udp      3130
 http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
@@ -488,6 +532,8 @@ semanage port -a -t http_port_t -p tcp 8088
 ```
 ```bash
 semanage port -l | grep http
+```
+```
 http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
 http_cache_port_t              udp      3130
 http_port_t                    tcp      8088, 80, 81, 443, 488, 8008, 8009, 8443, 9000
@@ -500,6 +546,8 @@ pegasus_https_port_t           tcp      5989
 ```bash
 systemctl start httpd
 systemctl status httpd
+```
+```
 oct. 15 10:28:15 rhel-srv httpd[6046]: Server configured, listening on: port 8088
 ```
 
@@ -507,6 +555,8 @@ oct. 15 10:28:15 rhel-srv httpd[6046]: Server configured, listening on: port 808
 
 ```bash
 curl http://localhost:8088/index.html
+```
+```
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
 <title>403 Forbidden</title>
@@ -522,6 +572,8 @@ curl http://localhost:8088/index.html
 
 ```bash
 sealert -l "*" | grep SELinux
+```
+```
 SELinux interdit à /usr/sbin/httpd d'utiliser l'accès getattr sur le fichier /var/labwww/html/index.html.
 ```
 
@@ -529,6 +581,8 @@ SELinux interdit à /usr/sbin/httpd d'utiliser l'accès getattr sur le fichier /
 
 ```bash
 ls -Z /var/labwww/html/
+```
+```
 unconfined_u:object_r:var_t:s0 index.html
 ```
 
@@ -536,6 +590,8 @@ unconfined_u:object_r:var_t:s0 index.html
 
 ```bash
 ps -auxZ | grep httpd
+```
+```
 system_u:system_r:httpd_t:s0    root        6046  0.0  0.6  25204 10936 ?        Ss   10:28   0:00 /usr/sbin/httpd -DFOREGROUND
 system_u:system_r:httpd_t:s0    apache      6047  0.0  0.3  36080  5312 ?        S    10:28   0:00 /usr/sbin/httpd -DFOREGROUND
 system_u:system_r:httpd_t:s0    apache      6048  0.0  0.4 1585336 7820 ?        Sl   10:28   0:00 /usr/sbin/httpd -DFOREGROUND
@@ -553,6 +609,8 @@ seinfo -t | grep http
 
 ```bash
 matchpathcon /var/www
+```
+```
 /var/www	system_u:object_r:httpd_sys_content_t:s0
 ```
 
@@ -569,6 +627,8 @@ semanage fcontext -a -t httpd_sys_content_t "/var/labwww(/.*)?"
 
 ```bash
 restorecon -R -v /var/labwww
+```
+```
 Relabeled /var/labwww from unconfined_u:object_r:var_t:s0 to unconfined_u:object_r:httpd_sys_content_t:s0
 Relabeled /var/labwww/html from unconfined_u:object_r:var_t:s0 to unconfined_u:object_r:httpd_sys_content_t:s0
 Relabeled /var/labwww/html/index.html from unconfined_u:object_r:var_t:s0 to unconfined_u:object_r:httpd_sys_content_t:s0
@@ -578,11 +638,15 @@ Relabeled /var/labwww/html/index.html from unconfined_u:object_r:var_t:s0 to unc
 
 ```bash
 ls -dZ /var/labwww/html/
+```
+```
 unconfined_u:object_r:httpd_sys_content_t:s0 /var/labwww/html/
 ```
 
 ```bash
 curl http://localhost:8088/index.html
+```
+```
 <h1>Hello World</h1>
 ```
 

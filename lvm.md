@@ -32,6 +32,8 @@
 
 ```bash
 lsblk
+```
+```
 NAME          MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
 sda             8:0    0     8G  0 disk 
 ├─sda1          8:1    0     1M  0 part 
@@ -59,6 +61,8 @@ _Il est possible d'utiliser un disque entier ou une partition pour créer un PV,
 
 ```bash
 fdisk /dev/sdb
+```
+```
 
 Welcome to fdisk (util-linux 2.40.2).
 Changes will remain in memory only, until you decide to write them.
@@ -77,10 +81,12 @@ Command (m for help):
 
 #### Cette opération est à réitérer avec SDC
 
-<ins>Vérification:</ins>
+**Vérification:**
 
 ```bash
 lsblk
+```
+```
 NAME          MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
 sda             8:0    0     8G  0 disk 
 ├─sda1          8:1    0     1M  0 part 
@@ -99,6 +105,8 @@ sr0            11:0    1 816,4M  0 rom
 
 ```bash
 fdisk -l /dev/sdb /dev/sdc
+```
+```
 Disk /dev/sdb: 4 GiB, 4294967296 bytes, 8388608 sectors
 Disk model: QEMU HARDDISK   
 Units: sectors of 1 * 512 = 512 bytes
@@ -131,20 +139,24 @@ Device     Start     End Sectors Size Type
 
 ### Création des PV
 
-_Le 1er PV doit être créé manuellement, il est possible d'ajouter des volumes ensuite directement avec vgcreate_
+**Le 1er PV doit être créé manuellement, il est possible d'ajouter des volumes ensuite directement avec vgcreate**
 
 ```bash
 pvcreate /dev/sdb1 /dev/sdc1
+```
+```
   Physical volume "/dev/sdb1" successfully created.
   Physical volume "/dev/sdc1" successfully created.
 ```
 
-**On a créé un PV avec /dev/sdb1 et un PV avec /dev/sdc1**
+_On a créé un PV avec /dev/sdb1 et un PV avec /dev/sdc1_
 
-<ins>Vérification:</ins>
+**Vérification:**
 
 ```bash
 pvdisplay /dev/sdb1 /dev/sdc1
+```
+```
   "/dev/sdb1" is a new physical volume of "<4,00 GiB"
   --- NEW Physical volume ---
   PV Name               /dev/sdb1
@@ -176,14 +188,18 @@ pvdisplay /dev/sdb1 /dev/sdc1
 
 ```bash
 vgcreate Labo1 /dev/sdb1 /dev/sdc1
+```
+```
   Volume group "Labo1" successfully created
 ```
-**On a créé un VG nommé _Labo1_ avec 2 volumes: _sdb1_ et _sdc1_**
+_On a créé un VG nommé `Labo1` avec 2 volumes: `sdb1` et `sdc1`_
 
-<ins>Vérification:</ins>
+**Vérification:**
 
 ```bash
 vgdisplay Labo1
+```
+```
   --- Volume group ---
   VG Name               Labo1
   System ID             
@@ -219,15 +235,19 @@ vgdisplay Labo1
 
 ```bash
 lvcreate -n lvlab1 -l 33%VG Labo1
+```
+```
   Logical volume "lvlab1" created.
 ```
 
-**On a créé un LV nommé _lvlab1_ sur le VG _Labo1_ d'une taille égale à 33% de la taille totale du VG**
+_on a créé un LV nommé `lvlab1` sur le VG `Labo1` d'une taille égale à 33% de la taille totale du VG_
 
-<ins>Vérification:</ins>
+**Vérification:**
 
 ```bash
 lvdisplay Labo1/lvlab1
+```
+```
   --- Logical volume ---
   LV Path                /dev/Labo1/lvlab1
   LV Name                lvlab1
@@ -253,11 +273,15 @@ lvdisplay Labo1/lvlab1
 
 ```bash
 lvcreate -n lvlab2 -l 33%VG Labo1
+```
+```
   Logical volume "lvlab2" created.
 ```
 
 ```bash
 lvcreate -n lvlab3 -l 33%VG Labo1
+```
+```
   Logical volume "lvlab3" created.
 ```
 
@@ -267,6 +291,8 @@ lvcreate -n lvlab3 -l 33%VG Labo1
 
 ```bash
 lvdisplay -m Labo1
+```
+```
   --- Logical volume ---
   LV Path                /dev/Labo1/lvlab1
   LV Name                lvlab1
@@ -343,9 +369,11 @@ lvdisplay -m Labo1
     Physical volume /dev/sdc1
     Physical extents 675 to 1001
 ```
-<ins>Avec lsblk:</ins>
+**Avec lsblk:**
 ```bash
 lsblk -f
+```
+```
 sdb                                                                 
 └─sdb1        LVM2_member LVM2 001
   ├─Labo1-lvlab1
@@ -359,7 +387,7 @@ sdc
   └─Labo1-lvlab3
 ```
 
-<ins>Représentation Graphique:</ins>
+**Représentation Graphique:**
 
 <p style="text-align: center;">
 
@@ -384,6 +412,8 @@ _On créé une partition ext4 par LV dans ce lab, à adapté selon les besoin_
 
 ```bash
 mkfs.ext4 /dev/Labo1/lvlab1
+```
+```
 mke2fs 1.47.1 (20-May-2024)
 Rejet des blocs de périphérique : complété                        
 En train de créer un système de fichiers avec 691200 4k blocs et 172832 i-noeuds.
@@ -416,10 +446,12 @@ mount /dev/Labo1/lvlab2 /mnt/lvlab2
 mount /dev/Labo1/lvlab3 /mnt/lvlab3
 ```
 
-<ins>Vérification:</ins>
+**Vérification:**
 
 ```bash
 df | grep mnt
+```
+```
 /dev/mapper/Labo1-lvlab1     2647744      24    2493096   1% /mnt/lvlab1
 /dev/mapper/Labo1-lvlab2     2647744      24    2493096   1% /mnt/lvlab2
 /dev/mapper/Labo1-lvlab3     2647744      24    2493096   1% /mnt/lvlab3
@@ -431,6 +463,8 @@ _Pour le lab on va créer des fichiers inutiles de tailles diverses_
 
 ```bash
 dd if=/dev/urandom of=/mnt/lvlab1/fichier_500mo bs=1M count=500 status=progress
+```
+```
 421527552 octets (422 MB, 402 MiB) copiés, 1 s, 421 MB/s
 500+0 enregistrements lus
 500+0 enregistrements écrits
@@ -441,6 +475,8 @@ dd if=/dev/urandom of=/mnt/lvlab1/fichier_500mo bs=1M count=500 status=progress
 
 ```bash
 dd if=/dev/urandom of=/mnt/lvlab2/fichier_1Go bs=1M count=1000 status=progress
+```
+```
 844103680 octets (844 MB, 805 MiB) copiés, 2 s, 422 MB/s
 1000+0 enregistrements lus
 1000+0 enregistrements écrits
@@ -451,16 +487,20 @@ dd if=/dev/urandom of=/mnt/lvlab2/fichier_1Go bs=1M count=1000 status=progress
 
 ```bash
 dd if=/dev/urandom of=/mnt/lvlab3/fichier_1_5Go bs=1M count=1500 status=progress
+```
+```
 1284505600 octets (1,3 GB, 1,2 GiB) copiés, 3 s, 428 MB/s
 1500+0 enregistrements lus
 1500+0 enregistrements écrits
 1572864000 octets (1,6 GB, 1,5 GiB) copiés, 3,67833 s, 428 MB/s
 ```
 
-<ins>Vérifications:</ins>
+**Vérifications:**
 
 ```bash
 tree -h /mnt
+```
+```
 [   48]  /mnt
 ├── [ 4.0K]  lvlab1
 │   ├── [ 500M]  fichier_500mo
@@ -483,6 +523,8 @@ tree -h /mnt
 
 ```bash
 lsblk
+```
+```
 NAME             MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
 sda                8:0    0     8G  0 disk 
 ├─sda1             8:1    0     1M  0 part 
@@ -506,7 +548,8 @@ sr0               11:0    1 816,4M  0 rom
 
 ```bash
 fdisk /dev/sdd
-
+```
+```
 Welcome to fdisk (util-linux 2.40.2).
 Changes will remain in memory only, until you decide to write them.
 Be careful before using the write command.
@@ -524,10 +567,12 @@ Command (m for help):
 
 **On a créé une table de partition GPT avec une partition n°1 de type LVM Linux sur la totalité de l'espace disponible sur le disque SDD**
 
-<ins>Vérification:</ins>
+**Vérification:**
 
 ```bash
 fdisk -l /dev/sdd
+```
+```
 Disk /dev/sdd: 4 GiB, 4294967296 bytes, 8388608 sectors
 Disk model: QEMU HARDDISK   
 Units: sectors of 1 * 512 = 512 bytes
@@ -544,14 +589,18 @@ Device     Start     End Sectors Size Type
 
 ```bash
 vgextend Labo1 /dev/sdd1
+```
+```
   Physical volume "/dev/sdd1" successfully created.
   Volume group "Labo1" successfully extended
 ```
 
-<ins>Vérification:</ins>
+**Vérification:**
 
 ```bash
 vgdisplay Labo1
+```
+```
   --- Volume group ---
   VG Name               Labo1
   System ID             
@@ -578,7 +627,7 @@ vgdisplay Labo1
 - `VG Size               <11,99 GiB` &rarr; Nouvelle taille totale du VG
 - `Free  PE / Size       1044 / <4,08 GiB` &rarr; Espace disponible
 
-<ins>Représentation Graphique:</ins>
+**Représentation Graphique:**
 
 <p style="text-align: center;">
 
@@ -603,14 +652,18 @@ _Afin d'utiliser la taille maximale d'espace disponible, dans ce lab on va défi
 
 ```bash
 lvresize -l +1044 Labo1/lvlab3
+```
+```
   Size of logical volume Labo1/lvlab3 changed from <2,64 GiB (675 extents) to 6,71 GiB (1719 extents).
   Logical volume Labo1/lvlab3 successfully resized.
 ```
 
-<ins>Vérifications:</ins>
+**Vérifications:**
 
 ```bash
 lvdisplay -m Labo1/lvlab3
+```
+```
   --- Logical volume ---
   LV Path                /dev/Labo1/lvlab3
   LV Name                lvlab3
@@ -661,6 +714,8 @@ umount /mnt/lvlab3
 
 ```bash
 e2fsck -f /dev/Labo1/lvlab3
+```
+```
 e2fsck 1.47.1 (20-May-2024)
 Passe 1 : vérification des i-noeuds, des blocs et des tailles
 Passe 2 : vérification de la structure des répertoires
@@ -672,6 +727,8 @@ Passe 5 : vérification de l'information du sommaire de groupe
 
 ```bash
 resize2fs /dev/Labo1/lvlab3
+```
+```
 resize2fs 1.47.1 (20-May-2024)
 En train de redimensionner le système de fichiers sur /dev/Labo1/lvlab3 à 1760256 (4k) blocs.
 Le système de fichiers sur /dev/Labo1/lvlab3 a maintenant une taille de 1760256 blocs (4k).
@@ -685,10 +742,12 @@ _Il est possible de définir une taille précise avec resize2fs:_ `resize2fs -p 
 mount /dev/Labo1/lvlab3 /mnt/lvlab3
 ```
 
-<ins>Verification:</ins>
+**Verification:**
 
 ```bash
 df -h | grep mnt
+```
+```
 /dev/mapper/Labo1-lvlab1   2,6G    501M  1,9G  21% /mnt/lvlab1
 /dev/mapper/Labo1-lvlab2   2,6G   1001M  1,5G  42% /mnt/lvlab2
 /dev/mapper/Labo1-lvlab3   6,6G    1,5G  4,8G  24% /mnt/lvlab3
@@ -702,6 +761,8 @@ df -h | grep mnt
 
 ```bash
 dd if=/dev/urandom of=/mnt/lvlab3/fichier_500mo bs=1M count=500 status=progress
+```
+```
 421527552 octets (422 MB, 402 MiB) copiés, 1 s, 421 MB/s
 500+0 enregistrements lus
 500+0 enregistrements écrits
@@ -710,6 +771,8 @@ dd if=/dev/urandom of=/mnt/lvlab3/fichier_500mo bs=1M count=500 status=progress
 
 ```bash
 ls -lh /mnt/lvlab3
+```
+```
 total 2,0G
 -rw-r--r--. 1 root root 1,5G  9 oct.  09:07 fichier_1_5Go
 -rw-r--r--. 1 root root 500M  9 oct.  09:59 fichier_500mo
@@ -738,6 +801,8 @@ umount /dev/Labo1/lvlab3
 
 ```bash
 e2fsck -f /dev/Labo1/lvlab3
+```
+```
 e2fsck 1.47.1 (20-May-2024)
 Passe 1 : vérification des i-noeuds, des blocs et des tailles
 Passe 2 : vérification de la structure des répertoires
@@ -751,6 +816,8 @@ Passe 5 : vérification de l'information du sommaire de groupe
 
 ```bash
 resize2fs -M /dev/Labo1/lvlab3
+```
+```
 resize2fs 1.47.1 (20-May-2024)
 En train de redimensionner le système de fichiers sur /dev/Labo1/lvlab3 à 257851 (4k) blocs.
 Le système de fichiers sur /dev/Labo1/lvlab3 a maintenant une taille de 257851 blocs (4k).
@@ -760,6 +827,8 @@ Le système de fichiers sur /dev/Labo1/lvlab3 a maintenant une taille de 257851 
 
 ```bash
 pvdisplay /dev/sdd1
+```
+```
   --- Physical volume ---
   PV Name               /dev/sdd1
   VG Name               Labo1
@@ -773,6 +842,8 @@ pvdisplay /dev/sdd1
 ```
 ```bash
 fdisk -l /dev/Labo1/lvlab3
+```
+```
 Disk /dev/Labo1/lvlab3: 6,71 GiB, 7210008576 bytes, 14082048 sectors
 Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
@@ -782,6 +853,8 @@ I/O size (minimum/optimal): 512 bytes / 512 bytes
 
 ```bash
 lvresize -L 2G Labo1/lvlab3
+```
+```
   File system ext4 found on Labo1/lvlab3.
   File system size (1007,23 MiB) is smaller than the requested size (2,00 GiB).
   File system reduce is not needed, skipping.
@@ -793,6 +866,8 @@ lvresize -L 2G Labo1/lvlab3
 
 ```bash
 pvmove /dev/sdd1
+```
+```
   /dev/sdd1: Moved: 1,17%
   /dev/sdd1: Moved: 67,97%
   /dev/sdd1: Moved: 100,00%
@@ -802,6 +877,8 @@ pvmove /dev/sdd1
 
 ```bash
 vgreduce Labo1 /dev/sdd1
+```
+```
   Removed "/dev/sdd1" from volume group "Labo1"
 ```
 
@@ -809,6 +886,8 @@ vgreduce Labo1 /dev/sdd1
 
 ```bash
 pvremove /dev/sdd1
+```
+```
   Labels on physical volume "/dev/sdd1" successfully wiped.
 ```
 
@@ -816,21 +895,27 @@ pvremove /dev/sdd1
 
 ```bash
 lvresize -l +100%FREE Labo1/lvlab3
+```
+```
   Size of logical volume Labo1/lvlab3 changed from 2,00 GiB (512 extents) to <2,72 GiB (696 extents).
   Logical volume Labo1/lvlab3 successfully resized.
 ```
 
 ```bash
 resize2fs /dev/Labo1/lvlab3
+```
+```
 resize2fs 1.47.1 (20-May-2024)
 En train de redimensionner le système de fichiers sur /dev/Labo1/lvlab3 à 524288 (4k) blocs.
 Le système de fichiers sur /dev/Labo1/lvlab3 a maintenant une taille de 524288 blocs (4k).
 ```
 
-<ins>Vérification:</ins>
+**Vérification:**
 
 ```bash
 vgdisplay Labo1
+```
+```
   --- Volume group ---
   VG Name               Labo1
   System ID             
@@ -863,6 +948,8 @@ vgdisplay Labo1
 `pvs` ou `pvscan` &rarr; liste d'informations minimales
 ```bash
 pvs
+```
+```
   PV         VG    Fmt  Attr PSize  PFree
   /dev/sda3  rhel  lvm2 a--  <7,00g    0 
   /dev/sdb1  Labo1 lvm2 a--  <4,00g    0 
@@ -870,6 +957,8 @@ pvs
 ```
 ```bash
 pvscan
+```
+```
   PV /dev/sda3   VG rhel    lvm2 [<7,00 GiB / 0    free]
   PV /dev/sdb1   VG Labo1   lvm2 [<4,00 GiB / 0    free]
   PV /dev/sdc1   VG Labo1   lvm2 [<4,00 GiB / 0    free]
@@ -879,6 +968,8 @@ pvscan
 `pvdisplay` &rarr; liste d'informations détaillées avec nombreuses options &rarr; `--help`
 ```bash
 pvdisplay -m
+```
+```
   --- Physical volume ---
   PV Name               /dev/sda3
   VG Name               rhel
@@ -941,18 +1032,24 @@ pvdisplay -m
 `vgs` ou `vgscan` &rarr; liste d'informations minimales
 ```bash
 vgs
+```
+```
   VG    #PV #LV #SN Attr   VSize  VFree
   Labo1   2   3   0 wz--n-  7,99g    0 
   rhel    1   2   0 wz--n- <7,00g    0 
 ```
 ```bash
 vgscan
+```
+```
   Found volume group "rhel" using metadata type lvm2
   Found volume group "Labo1" using metadata type lvm2
 ```
 `vgdisplay Labo1` &rarr; liste d'informations détaillées avec nombreuses options &rarr; `--help`
 ```bash
 vgdisplay -v Labo1
+```
+```
   --- Volume group ---
   VG Name               Labo1
   System ID             
@@ -1042,6 +1139,8 @@ vgdisplay -v Labo1
 `lvs` ou `lvscan` &rarr; liste d'informations minimales
 ```bash
 lvs
+```
+```
   LV     VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
   lvlab1 Labo1 -wi-a-----  <2,64g                                                    
   lvlab2 Labo1 -wi-a-----  <2,64g                                                    
@@ -1051,6 +1150,8 @@ lvs
   ```
 ```bash
 lvscan
+```
+```
   ACTIVE            '/dev/rhel/swap' [820,00 MiB] inherit
   ACTIVE            '/dev/rhel/root' [<6,20 GiB] inherit
   ACTIVE            '/dev/Labo1/lvlab1' [<2,64 GiB] inherit
@@ -1060,6 +1161,8 @@ lvscan
 `lvdisplay` &rarr; liste d'informations détaillées avec nombreuses options &rarr; `--help`
 ```bash
 lvdisplay -m Labo1
+```
+```
   --- Logical volume ---
   LV Path                /dev/Labo1/lvlab1
   LV Name                lvlab1
