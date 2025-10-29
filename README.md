@@ -6,4 +6,5 @@
 - Chapitre [NMCLI](./nmcli.md)
 - Chapitre [SWAP](./swap.md)
 - Chapitre [SELinux](./selinux.md)
-- Chapitre [Firewalld](./firewalld)
+- Chapitre [Firewalld](./firewalld.md)
+- Chapitre [Grub2](./grub2.md)
