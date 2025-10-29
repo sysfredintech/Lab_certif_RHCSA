@@ -180,7 +180,7 @@ grubby --default-index
 
 ---
 
-## La configuration du menu GRUB
+##  La configuration du menu GRUB
 
 - La configuration se fait par l'édition du fichier /etc/default/grub
 
