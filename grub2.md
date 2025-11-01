@@ -276,7 +276,7 @@ Supprimer le hash du mot de passe root situé entre les 2 premiers `:`, exemple:
 
 - Refaire les étape 5 et 6
 
-La connexion avec le compte root se fasse sans mot de passe, il sera alors possible de le redéfinir avec `passwd` à la prochaine connexion
+La connexion avec le compte root se fera sans mot de passe, il sera alors possible de le redéfinir avec `passwd` à la prochaine connexion
 
 ---
 
