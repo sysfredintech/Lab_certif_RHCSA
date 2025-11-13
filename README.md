@@ -8,3 +8,5 @@
 - Chapitre [SELinux](./selinux.md)
 - Chapitre [Firewalld](./firewalld.md)
 - Chapitre [Grub2](./grub2.md)
+- Chapitre [Permissions et ACLs](./Permissions-et-ACLs.md)
+- Chapitre [Quotas](./Quotas.md)
