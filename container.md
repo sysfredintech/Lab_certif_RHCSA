@@ -442,7 +442,8 @@ podman exec labredis sh -c "curl http://10.89.0.2:8080"
 ```
 _Le conteneur labredis peut contacter httpdlab_
 
-###  Les journaux
+
+### Les journaux
 
 - Afficher les logs d'un conteneur en cours d'exécution
 ```bash
