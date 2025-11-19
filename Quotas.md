@@ -1,4 +1,4 @@
-# RELH 10 - Les Quotas
+# RHEL 10 - Les Quotas
 
 ---
 
