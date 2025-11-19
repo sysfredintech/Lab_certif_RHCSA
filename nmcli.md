@@ -1,4 +1,4 @@
-# REHL 10 - NMCLI
+# RHEL 10 - NMCLI
 
 ***
 
