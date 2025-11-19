@@ -1,4 +1,4 @@
-# RHEL10 - Gestion du swap
+# RHEL 10 - Gestion du swap
 
 ***
 
