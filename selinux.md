@@ -1,4 +1,4 @@
-# RHEL10 - SELinux
+# RHEL 10 - SELinux
 
 ---
 
