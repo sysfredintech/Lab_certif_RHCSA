@@ -81,25 +81,25 @@ systemctl --failed
 
 ### Gestion des targets
 
+Afficher la target par défaut utilisée par systemd
 ```bash
 systemctl get-default
 ```
-_Affiche la target par défaut utilisée par systemd_
 
+Afficher toutes les targets actuellement chargées
 ```bash
 systemctl list-units --type target
 ```
-_Affiche toutes les targets actuellement chargées_
 
+Configurer systemd de manière à utiliser une unité de cible différente par défaut
 ```bash
 systemctl set-default # nom.target
 ```
-_Configure systemd de manière à utiliser une unité de cible différente par défaut_
 
+Passer à une target différente dans la session actuelle
 ```bash
 systemctl isolate # nom.target
 ```
-_Passer à une target différente dans la session actuelle_
 
 ---
 
@@ -182,9 +182,7 @@ _Un lien symbolique a été créé dans le sous-dossier `multi-user.target.wants
 ```bash
 systemctl is-active labweb.service
 ```
-```
-active
-```
+`active`
 
 ---
 
