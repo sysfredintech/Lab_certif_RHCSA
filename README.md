@@ -12,3 +12,4 @@
 - Chapitre [Quotas](./Quotas.md)
 - Chapitre [Conteneurs](./container.md)
 - Chapitre [Systemd](./systemd.md)
+- Chapitre [Scripting-bash](./scripting-bash.md)
