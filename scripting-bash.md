@@ -1,4 +1,4 @@
-# RHEL 10 - Scripting Bash
+# RHEL 10 - Scripting Bash
 
 ---
 
@@ -14,7 +14,7 @@
 - `$` &rarr; fin de ligne
 - `\` &rarr; caractère d'échappement
 
-### Classes de caractères
+### Classes de caractères
 
 - `[abc]` &rarr; un caractère parmi la liste
 - `[A-Z]` &rarr; un caractère entre A et Z en majuscule
@@ -81,7 +81,7 @@ echo $?
 
 ---
 
-## Les opérateurs logiques
+### Les opérateurs logiques
 
 - `&&` &rarr; "ET" s'arrête après la première commande qui échoue (code 1-255)
 - `||` &rarr; "OU" s'arrête après la première commande qui réussit (code 0)
@@ -112,7 +112,7 @@ ls /tmp/lab/combo/test
 
 ---
 
-## Les structures conditionnelles
+## Les structures conditionnelles
 
 ### Syntaxe
 

@@ -1,4 +1,4 @@
-# RHEL 10 - Permissions et ACLs
+# RHEL 10 - Permissions et ACLs
 
 ---
 
