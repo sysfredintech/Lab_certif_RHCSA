@@ -13,3 +13,4 @@
 - Chapitre [Conteneurs](./container.md)
 - Chapitre [Systemd](./systemd.md)
 - Chapitre [Scripting-bash](./scripting-bash.md)
+- Chapitre [Gestion des logiciels](./logiciels.md)
