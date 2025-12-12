@@ -400,4 +400,6 @@ Proceed with these changes to the system installation? [Y/n]:
 
 _Source principale:_
 
+- https://docs.redhat.com/fr/documentation/red_hat_enterprise_linux/10/html/managing_software_with_the_dnf_tool/index
+- https://docs.redhat.com/fr/documentation/red_hat_enterprise_linux/7/html/system_administrators_guide/s1-rpm-using
 - https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/administering_the_system_using_the_gnome_desktop_environment/assembly_installing-applications-using-flatpak_administering-the-system-using-the-gnome-desktop-environment
