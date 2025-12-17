@@ -14,6 +14,6 @@
 - Chapitre [Systemd](./systemd.md)
 - Chapitre [Scripting-bash](./scripting-bash.md)
 - Chapitre [Gestion des logiciels](./logiciels.md)
-- Chapitre [Archivage et compréssion](./archives.md)
+- Chapitre [Archivage et compression](./archives.md)
 - Chapitre [Chrony](./chrony.md)
 - Chapitre [Commande find](./find.md)
