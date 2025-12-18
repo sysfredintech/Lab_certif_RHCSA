@@ -27,7 +27,7 @@ Pour afficher les colonnes concernant la priorité, l'id du processus, l'utilisa
 ```bash
 ps -eo ni,pid,user,cmd --sort=ni
 ```
-_La liste des code est disponible dans la page de manuel `man ps`_
+_La liste des codes est disponible dans la page de manuel `man ps`_
 
 Pour afficher tous les processus d'un utilisateur en particulier
 ```bash
@@ -97,7 +97,7 @@ free -th
 
 ---
 
-## normalements `nice` et `renice`
+## Les commandes `nice` et `renice`
 
 Ces deux commandes permettent d'exécuter un programme avec une priorité d'ordonnancement modifiée ou de redéfinir la priorité d'un processus en cours d'exécution.
 
@@ -154,6 +154,7 @@ fg %1
 
 - Suspendre la tâche
 `Ctrl` + `z`
+
 `[1]+  Stoppé                 sleep 180`
 
 - Reprendre la tâche en arrière-plan
@@ -165,7 +166,7 @@ bg %1
 
 ---
 
-## Les commandes `kill` et `killall`
+## Les commandes `kill` et `killall`
 
 > La commande `kill` envoie le signal spécifié aux processus ou groupes de processus spécifiés. Si aucun signal n'est spécifié, le signal TERM est envoyé. L'action par défaut pour ce signal est de mettre fin au processus.
 
