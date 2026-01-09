@@ -18,3 +18,5 @@
 - Chapitre [Chrony](./chrony.md)
 - Chapitre [Commande find](./find.md)
 - Chapitre [Gestion des processus et monitoring](./processus.md)
+- Chapitre [Gestion des utilisateurs et groupes](./users-groups-passwd.md)
+- Chapitre [Autofs](./autofs)
