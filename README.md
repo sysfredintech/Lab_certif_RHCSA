@@ -1,6 +1,7 @@
 # Préparation de la certification RHCSA
 ---
 ## Fiches pratiques, notes et TP sur les thèmes abordés à l'examen
+**Afin d'éviter de répéter la commande `sudo`, tous les exercices sont effectués avec le compte root**
 
 - Chapitre [LVM](./lvm.md)
 - Chapitre [NMCLI](./nmcli.md)
